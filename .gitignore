@@ -1,0 +1,71 @@
+# =========================
+
+# Django / Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# =========================
+
+# Django specific
+
+# =========================
+
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+
+# =========================
+
+# Virtual Environment
+
+# =========================
+
+dj_t_b/
+
+# =========================
+
+# Static & Media
+
+# =========================
+
+staticfiles/
+media/
+
+# (Keep your source static folder tracked)
+
+# static/
+
+# =========================
+
+# Environment Variables
+
+# =========================
+
+.env
+.env.*
+
+# =========================
+
+# IDE / Editor
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+
+# OS files
+
+# =========================
+
+.DS_Store
+Thumbs.db

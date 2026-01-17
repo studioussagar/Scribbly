@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }} - {{ object.author.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h1 class="card-title display-5 fw-bold">{{ object.title }}</h1>
+                    <p class="text-muted mb-2">
+                        By <strong>{{ object.author.name }}</strong> | {{ object.date_created|date:"F j, Y" }}
+                    </p>
+                    <hr>
+                    <div class="card-text fs-5">
+                        {{ object.content|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Like, Dislike, Share, Copy Link -->
+            <div class="d-flex justify-content-start align-items-center mb-4">
+                <button class="like-button btn btn-outline-primary btn-sm me-2" data-slug="{{ object.slug }}">
+                    👍 Like (<span class="likes-count">{{ object.likes.count }}</span>)
+                </button>
+                <button class="dislike-button btn btn-outline-primary btn-sm me-2" data-slug="{{ object.slug }}">
+                    👎 Dislike (<span class="dislikes-count">{{ object.dislikes.count }}</span>)
+                </button>
+
+                <!-- Share Dropdown -->
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        🔄 Share
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item share-site" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" data-site="facebook" data-slug="{{ object.slug }}">Share to Facebook</a></li>
+                        <li><a class="dropdown-item share-site" href="https://twitter.com/share?url={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" data-site="twitter" data-slug="{{ object.slug }}">Share to Twitter</a></li>
+                        <!-- Add more share destinations as needed -->
+                    </ul>
+                </div>
+                <input type="text" class="form-control btn-outline-secondary" style="max-width: 240px;" id="share-link"
+                    value="{{ request.build_absolute_uri }}" readonly>
+                <button class="btn btn-outline-secondary btn-sm ms-2" type="button" id="copy-share-link">🔗 Copy Link</button>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mt-5">
+                <h4>Comments</h4>
+                <!-- Comment Form -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            Leave a Comment
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#commentForm" aria-expanded="false" aria-controls="commentForm">▼</button>
+                        </h5>
+                        <div class="collapse" id="commentForm">
+                            <form method="post" action="{% url 'add_comment' slug=object.slug %}" data-slug="{{ object.slug }}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <textarea name="content" class="form-control" rows="4"
+                                        placeholder="Write your comment here..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="commentList">
+                    {% for comment in object.comments.all %}
+                    <div class="comment-card" style="margin-bottom: 10px;margin-top: -10px;">
+                        <div class="comment-meta">
+                            <span class="comment-author"><a href="{%url 'profiles:profile_detail' username=comment.user.name %}">{{ comment.user.name }}</a></span>
+                            <small class="comment-date">{{ comment.date_created|date:"M d, Y" }}</small>
+                        </div>
+                        <p class="mb-0">{{ comment.content }}</p>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS: Like/Dislike/Share/Copy functionality -->
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const c = cookie.trim();
+            if (c.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(c.slice(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.getElementById('copy-share-link').onclick = function () {
+    var linkInput = document.getElementById('share-link');
+    linkInput.select();
+    document.execCommand('copy');
+    this.innerText = '🔗Copied!';
+    setTimeout(() => { this.innerText = '🔗Copy Link'; }, 3000);
+};
+
+// Like/Dislike AJAX handlers
+document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+        const slug = this.dataset.slug;
+        fetch(`/like/${slug}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        }).then(resp => resp.json())
+            .then(data => {
+                if (data.liked) {
+                    this.classList.add('btn-primary');
+                    this.classList.remove('btn-outline-primary');
+                } else {
+                    this.classList.add('btn-outline-primary');
+                    this.classList.remove('btn-primary');
+                }
+                this.querySelector('.likes-count').textContent = data.total_likes;
+                const dislikeBtn = document.querySelector('.dislike-button[data-slug="' + this.dataset.slug + '"]');
+                if (dislikeBtn) {
+                    dislikeBtn.querySelector('.dislikes-count').textContent = data.total_dislikes;
+                    if (data.total_dislikes === 0) {
+                        dislikeBtn.classList.remove('btn-primary');
+                        dislikeBtn.classList.add('btn-outline-primary');
+                    }
+                }
+            });
+    });
+});
+
+document.querySelectorAll('.dislike-button').forEach(button => {
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+        const slug = this.dataset.slug;
+        fetch(`/dislike/${slug}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        }).then(resp => resp.json())
+            .then(data => {
+                if (data.disliked) {
+                    this.classList.add('btn-primary');
+                    this.classList.remove('btn-outline-primary');
+                } else {
+                    this.classList.add('btn-outline-primary');
+                    this.classList.remove('btn-primary');
+                }
+                this.querySelector('.dislikes-count').textContent = data.total_dislikes;
+                const likeBtn = document.querySelector('.like-button[data-slug="' + this.dataset.slug + '"]');
+                if (likeBtn) {
+                    likeBtn.querySelector('.likes-count').textContent = data.total_likes;
+                    if (data.total_likes === 0) {
+                        likeBtn.classList.remove('btn-primary');
+                        likeBtn.classList.add('btn-outline-primary');
+                    }
+                }
+            });
+    });
+});
+
+// Share dropdown AJAX
+document.querySelectorAll('.share-site').forEach(item => {
+    item.addEventListener('click', function (e) {
+        e.preventDefault();
+        const site = this.dataset.site;
+        const slug = this.dataset.slug;
+        fetch(`/share-post/${slug}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ site: site }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Post shared successfully on ${site}!`);
+            } else {
+                alert('Failed to share post. Please try again.');
+            }
+        })
+        .catch(err => {
+            alert('Error sharing the post.');
+        });
+    });
+});
+</script>
+{% endblock %}

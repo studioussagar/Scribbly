@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit Profile - {{ request.user.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 edit-profile-container">
+    <h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <h4>User Information</h4>
+        {% for field in user_form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="text-danger">
+                {% for error in field.errors %}
+                <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <h4>Profile Information</h4>
+        {% for field in profile_form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% if field.errors %}
+            <div class="text-danger">
+                {% for error in field.errors %}
+                <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" style="align-items: center;">Save Changes</button>
+            <a href="{% url 'profiles:profile_me' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+</div>
+{% endblock %}

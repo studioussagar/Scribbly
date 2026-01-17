@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login / Sign Up - {{ site_name|default:"Your Blog" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4" id="form-title">Login</h4>
+
+                    <!-- Toggle Buttons -->
+                    <div class="d-flex justify-content-center mb-3">
+                        <button type="button" class="btn btn-outline-primary me-2" onclick="showLogin()">Login</button>
+                        <button type="button" class="btn btn-outline-success" onclick="showSignup()">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form method="post" action="{% url 'login' %}" id="login-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="login-username" class="form-label">Username</label>
+                            <input type="text" name="username" id="login-username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" name="password" id="login-password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Log In</button>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form method="post" action="{% url 'signup' %}" id="signup-form" style="display: none;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="signup-name" class="form-label">Full Name</label>
+                            <input type="text" name="name" id="signup-name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-username" class="form-label">Username</label>
+                            <input type="text" name="username" id="signup-username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-email" class="form-label">Email</label>
+                            <input type="email" name="email" id="signup-email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-password" class="form-label">Password</label>
+                            <input type="password" name="password" id="signup-password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-role" class="form-label">Role</label>
+                            <select name="role" id="signup-role" class="form-select">
+                                <option value="viewer">Viewer</option>
+                                <option value="author">Author</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showLogin() {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("signup-form").style.display = "none";
+        document.getElementById("form-title").textContent = "Login";
+    }
+
+    function showSignup() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("signup-form").style.display = "block";
+        document.getElementById("form-title").textContent = "Sign Up";
+    }
+</script>
+{% endblock %}

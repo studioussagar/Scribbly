@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Posts in Category: {{ category.name }} - Scribbly{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Category: {{ category.name }}</h2>
+  <p>{{ category.description }}</p>
+
+  {% if object_list %}
+    <div class="list-group">
+      {% for post in object_list %}
+        <div class="list-group-item mb-3">
+          <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+          <div class="text-muted mb-2">
+            By {{ post.author.name }} | {{ post.date_created|date:"M d, Y" }}
+          </div>
+          <div>
+            {{ post.content|truncatechars_html:300|safe }}
+          </div>
+          <a href="{{ post.get_absolute_url }}" class="btn btn-primary mt-2">Read More</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; Prev</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo; Prev</span>
+            </li>
+          {% endif %}
+
+          {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+              <li class="page-item"><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next &raquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next &raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  {% else %}
+    <p>No posts available in this category.</p>
+  {% endif %}
+</div>
+{% endblock %}

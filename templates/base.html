@@ -1,0 +1,227 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}My Site{% endblock %}</title>
+
+        <!-- Bootstrap, Icons, Typed -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+        <link rel="stylesheet" href="{% static 'css/chat_whatsapp.css' %}">
+
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1;
+            }
+        </style>
+
+        {% block head_extra %}{% endblock %}
+    </head>
+
+    <body class="dark-theme">
+
+        <div class="container">
+            <header class=" mb-4 border-bottom border-2 border-primary">
+                <div class="d-flex align-items-center w-100">
+
+                    <!-- Brand far left -->
+                    <a href="{% url 'home_view' %}" class="text-decoration-none">
+                        <span class="fs-4 site_title">Scribbly</span>
+                    </a>
+
+                    <!-- Everything else on the right, in order -->
+                    <ul class="nav nav-pills align-items-center ms-auto flex-nowrap">
+
+                        <!-- 1) Theme toggler -->
+                        <li class="nav-item me-2">
+                            <div class="toggle-switch">
+                                <label class="switch-label">
+                                    <input type="checkbox" class="checkbox" id="theme-toggle-checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </li>
+
+                        <!-- 2) Search toggle + collapsible bar -->
+                        <li class="nav-item me-3">
+                            <div class="nav-search-wrap d-flex align-items-center">
+                                <button id="nav-search-toggle"
+                                    class="btn btn-outline-secondary d-inline-flex align-items-center navbar-icon" aria-expanded="false"
+                                    aria-controls="nav-search-reveal" aria-label="Toggle search">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                                        <path
+                                            d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <div id="nav-search-reveal" class="nav-search-reveal">
+                                    <form class="custom-search container" method="get" action="{% url 'blog_list' %}">
+                                        <div class="search-container">
+                                            <input type="text" class="input" name="q" value="{{ query }}"
+                                                placeholder="Search…" aria-label="Search">
+                                            <button type="submit" class="search__icon" aria-label="Submit">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path
+                                                        d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- 3) Home -->
+                        <li class="nav-item me-2">
+                            <a href="{% url 'home_view' %}"
+                                class="nav-link {% if request.resolver_match.url_name == 'home_view' %}active{% endif %}">
+                                Home
+                            </a>
+                        </li>
+
+                        <!-- 4) Dashboard -->
+                        <li class="nav-item me-2">
+                            <a href="{% url 'dashboard' %}"
+                                class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <!-- 5) Categories pill -->
+                        <li class="nav-item dropdown me-2">
+                            <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill" href="#" id="categoryDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Categories
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'category_posts' slug=category.slug %}">{{category }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <!-- 6/7) Username then Login/Logout -->
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="me-2 fw-bold fst-italic" style="font-family: 'Times New Roman';"><a href="{% url 'profiles:profile_detail' username=request.user.name  %}">{{request.user.name }}</a></span>
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}"
+                                class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                                Login
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </header>
+
+
+        </div>
+
+        <main class="container">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-auto border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1" aria-label="Bootstrap">
+                    <svg class="bi" width="30" height="24" aria-hidden="true">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2025 Company, Inc</span>
+            </div>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" href="#" aria-label="Instagram"><i
+                            class="bi bi-instagram"></i></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="#" aria-label="Facebook"><i
+                            class="bi bi-facebook"></i></a></li>
+            </ul>
+        </footer>
+
+        <!-- Theme toggle script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
+                const body = document.body;
+                const savedTheme = localStorage.getItem('theme') || 'dark-theme';
+                body.classList.add(savedTheme);
+                toggleCheckbox.checked = savedTheme === 'light-theme';
+
+                toggleCheckbox.addEventListener('change', () => {
+                    if (toggleCheckbox.checked) {
+                        body.classList.replace('dark-theme', 'light-theme');
+                        localStorage.setItem('theme', 'light-theme');
+                    } else {
+                        body.classList.replace('light-theme', 'dark-theme');
+                        localStorage.setItem('theme', 'dark-theme');
+                    }
+                });
+            });
+        </script>
+
+        <!-- Collapsible search reveal -->
+        <script>
+            (function () {
+                const toggleBtn = document.getElementById('nav-search-toggle');
+                const box = document.getElementById('nav-search-reveal');
+
+                function openBox() {
+                    box.classList.add('open');
+                    toggleBtn.setAttribute('aria-expanded', 'true');
+                    const input = box.querySelector('input');
+                    if (input) setTimeout(() => input.focus(), 150);
+                }
+                function closeBox() {
+                    box.classList.remove('open');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+                function toggle() {
+                    if (box.classList.contains('open')) closeBox(); else openBox();
+                }
+
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggle();
+                });
+
+                // Escape or outside click closes
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && box.classList.contains('open')) closeBox();
+                });
+                document.addEventListener('click', (e) => {
+                    if (!box.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+                        if (box.classList.contains('open')) closeBox();
+                    }
+                });
+            })();
+        </script>
+
+        {% block scripts_extra %}{% endblock %}
+    </body>
+
+    </html>

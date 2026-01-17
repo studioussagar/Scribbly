@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}{{ profile_user.name }} — Profile{% endblock %}
+
+
+{% block content %}
+<div class="container profile-page mt-4">
+
+
+  <!-- Header / Hero -->
+  <section class="profile-hero card shadow-sm p-3 p-md-4 mb-4">
+    <div class="d-flex align-items-center flex-wrap gap-3 w-100">
+
+
+      <!-- Avatar -->
+      <div class="avatar-wrap position-relative">
+        <img src="{{ profile_user.profile.avatar_url|default:'' }}" alt="{{ profile_user.name }}" class="avatar-lg rounded-circle" />
+{% if not profile_user.profile.avatar_url %}
+  <img src="{% static 'img/avatar-default.png' %}" alt="{{ profile_user.name }}" class="avatar-lg rounded-circle" />
+{% endif %}
+
+        {% if request.user == profile_user %}
+          <!-- Optional edit chip on avatar for owner -->
+          <label class="position-absolute bottom-0 end-0 btn btn-sm btn-outline-primary rounded-pill px-2 py-1"
+                 for="avatarUpload" style="transform: translate(20%, 20%);">
+            Change
+          </label>
+          <form id="avatarUploadForm" class="d-none" method="post" action="{% url 'profiles:upload_avatar' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" id="avatarUpload" name="avatar" accept="image/*">
+          </form>
+        {% endif %}
+      </div>
+
+
+      <!-- Identity -->
+      <div class="flex-grow-1">
+        <h1 class="h3 mb-1 d-flex align-items-center gap-2">
+          {{ profile_user.name }}
+          {% if profile_user.is_staff %}
+            <span class="badge role-badge">Admin</span>
+          {% else %}
+            <span class="badge role-badge">Author</span>
+          {% endif %}
+        </h1>
+        <p class="text-muted mb-1">@{{ profile_user.username }}</p>
+        <p class="text-muted small mb-0">Joined {{ profile_user.date_joined|date:"M d, Y" }}</p>
+      </div>
+
+
+      <!-- Actions -->
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        {% if request.user == profile_user %}
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">Dashboard</a>
+          <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm">Write Post</a>
+          <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+
+          <!-- Default avatars chooser (modal trigger) -->
+          <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#defaultAvatarModal">
+            Choose Avatar
+          </button>
+        {% else %}
+          <!-- Viewer looking at someone else -->
+          <form method="post" action="{% url 'profiles:toggle_follow' username=profile_user.username %}" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-primary btn-sm">
+              {% if profile_user in request.user.profile.following.all %}Following{% else %}Follow{% endif %}
+            </button>
+          </form>
+          <a href="{% url 'profiles:message_user' target_username=profile_user.username %}" class="btn btn-outline-secondary btn-sm">Message</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+
+  <div class="row g-4">
+    <!-- Left column -->
+    <div class="col-lg-4">
+
+
+      <!-- About -->
+      <div class="card shadow-sm profile-card mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">About</h5>
+          <p class="mb-0">{{ profile_user.profile.bio|default:"No bio yet." }}</p>
+        </div>
+      </div>
+
+
+      <!-- Details (no Website) -->
+      <div class="card shadow-sm profile-card mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Details</h5>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Location</span>
+              <span>{{ profile_user.profile.location|default:"-" }}</span>
+            </li>
+            <li class="d-flex justify-content-between">
+              <span class="text-muted">Member since</span>
+              <span>{{ profile_user.date_joined|date:"M d, Y" }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+      <!-- Topics/Tags -->
+      <div class="card shadow-sm profile-card">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Topics</h5>
+          <div class="d-flex flex-wrap gap-2">
+            {% for tag in profile_user.profile.topics.all %}
+              <span class="badge topic-pill">{{ tag.name }}</span>
+            {% empty %}
+              <span class="text-muted">No topics yet.</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Right column -->
+    <div class="col-lg-8">
+
+
+      <!-- Stats -->
+      <div class="card shadow-sm profile-card mb-4">
+        <div class="card-body d-flex flex-wrap gap-3">
+          <div class="stat">
+            <div class="stat-value">{{ profile_user.posts.count }}</div>
+            <div class="stat-label">Posts</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{ profile_user.posts.aggregate_likes|default:0 }}</div>
+            <div class="stat-label">Total Likes</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{ profile_user.posts.aggregate_dislikes|default:0 }}</div>
+            <div class="stat-label">Dislikes</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{ profile_user.comments.count }}</div>
+            <div class="stat-label">Comments</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Recent activity (viewer sees a subset; owner sees all) -->
+      <div class="card shadow-sm profile-card mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Recent Activity</h5>
+          <ul class="list-unstyled mb-0">
+            {% for a in profile_user.profile.recent_activity %}
+              {% if request.user == profile_user or not a.private %}
+                <li class="activity-row d-flex justify-content-between py-2">
+                  <span>{{ a.text|safe }}</span>
+                  <small class="text-muted">{{ a.when|date:"M d, Y" }}</small>
+                </li>
+              {% endif %}
+            {% empty %}
+              <li class="text-muted">No recent activity.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+
+      <!-- Latest posts -->
+      <div class="card shadow-sm profile-card">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Latest Posts</h5>
+      {% for p in posts %}
+        <div class="post-row d-flex align-items-center justify-content-between py-2">
+          <a class="post-title text-decoration-none" href="{% url 'blog_view' p.slug %}">{{ p.title }}</a>
+          <div class="d-flex align-items-center gap-3">
+            <small class="text-muted">{{ p.date_created|date:"M d, Y" }}</small>
+            <span class="badge rounded-pill stat-chip">👍 {{ p.likes.count }}</span>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted mb-0">No posts yet.</p>
+      {% endfor %}
+    </div>
+</div>
+
+
+
+      {% if request.user == profile_user %}
+      <!-- Owner-only: drafts quick access -->
+      <div class="card shadow-sm profile-card mt-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Drafts</h5>
+          {% for d in filtered_posts %}
+            <div class="d-flex justify-content-between py-2">
+              <a href="{% url 'edit_post' slug=d.slug %}">{{ d.title }}</a>
+              <small class="text-muted">Updated {{ d.date_updated|date:"M d, Y" }}</small>
+            </div>
+          {% empty %}
+            <p class="text-muted mb-0">No drafts.</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+
+{% if request.user == profile_user %}
+<!-- Default Avatar Modal (owner only) -->
+<div class="modal fade" id="defaultAvatarModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="background: var(--card-bg-color); color: var(--card-text-color);">
+      <div class="modal-header">
+        <h5 class="modal-title">Choose an Avatar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-wrap gap-3">
+          {% for i in "12345678" %}
+            <button type="button" class="avatar-option btn p-0 border-0"
+                    data-src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}">
+              <img src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}"
+                   class="rounded-circle" style="width:72px;height:72px;object-fit:cover;">
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block scripts_extra %}
+{% if request.user == profile_user %}
+<script>
+  // Upload avatar via hidden input
+  const up = document.getElementById('avatarUpload');
+  if (up) {
+    up.addEventListener('change', () => document.getElementById('avatarUploadForm').submit());
+  }
+
+
+  // Pick default avatar
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.avatar-option');
+    if (!btn) return;
+    const src = btn.dataset.src;
+    const resp = await fetch("{% url 'profiles:set_default_avatar' %}", {
+      method: 'POST',
+      headers: {'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/)||[])[1]},
+      body: new URLSearchParams({ src })
+    });
+    if (resp.ok) location.reload(); else alert('Failed to set avatar.');
+  });
+</script>
+{% endif %}
+{% endblock %}

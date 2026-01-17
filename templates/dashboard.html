@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="dashboard container mt-5">
+
+  <!-- Add liked/disliked posts links for all users -->
+  <div class="mb-3">
+    <a href="{% url 'liked_posts' %}" class="btn btn-outline-primary me-2">Liked Posts</a>
+    <a href="{% url 'disliked_posts' %}" class="btn btn-outline-danger">Disliked Posts</a>
+    <a href="{% url 'shared_posts' %}" class="btn btn-outline-secondary">Shared Posts</a>
+  </div>
+
+  {% if request.user.is_author %}
+    <!-- Author Dashboard Card -->
+    <div class="card shadow mb-4">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Author Dashboard</h2>
+        <a href="{% url 'create_blog' %}" class="btn btn-warning"><i class="bi bi-plus-circle"></i> Create Blog</a>
+      </div>
+      <div class="card-body row">
+        <div class="col-md-8">
+          <h4>Your Blog Posts <small class="text-muted">(Sorted by Likes)</small></h4>
+          <table class="table table-hover table-dark rounded">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Likes</th>
+                <th>Dislikes</th>  <!-- New Dislike column -->
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for post in user_posts %}
+                <tr>
+                  <td>{{ post.title }}</td>
+                  <td><span class="badge bg-success">{{ post.total_likes }}</span></td>
+                  <td><span class="badge bg-danger">{{ post.total_dislikes }}</span></td>  <!-- Dislike count -->
+                  <td>
+                    <a href="{% url 'edit_post' post.slug %}" class="btn btn-outline-info btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                    <form action="{% url 'delete_post' post.slug %}" method="post" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this post?');"><i class="bi bi-trash"></i> Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center">No posts available.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <h4>Recent Comments</h4>
+          <ul class="list-group">
+            {% for comment in recent_comments %}
+              <li class="list-group-item">
+                <strong>{{ comment.author.name }}</strong>: {{ comment.content|truncatewords:15 }}
+              </li>
+            {% empty %}
+              <li class="list-group-item">No recent comments.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+  {% else %}
+    <!-- Viewer Dashboard Card -->
+    <div class="card shadow mb-5">
+      <div class="card-header bg-info text-white">
+        <h2 class="mb-0">Viewer Dashboard</h2>
+      </div>
+      <div class="card-body">
+        <p class="lead">Want to become a Author and write your own Blog<br>You can submit blogs for review and become ONE.</p>
+        <div class="btn-group mb-4">
+          <a href="{% url 'try_blog' %}" class="btn btn-primary">Submit Blog for Review</a>
+          <a href="{% url 'blog_list' %}" class="btn btn-outline-secondary">Browse Posts</a>
+        </div>
+
+        <div class="mt-4">
+          <h4>Recommended for You <i class="bi bi-stars"></i></h4>
+          <ul class="list-group">
+            {% for rec_post in recommended_posts %}
+            <li class="list-group-item">
+              <a href="{% url 'blog_view' rec_post.slug %}" class="fw-bold">{{ rec_post.title }}</a>
+              <span class="badge rounded-pill bg-warning text-dark ms-2">{{ rec_post.category.name }}</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item">No recommendations available yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        {% if user_can_become_author %}
+        <form method="post" action="{% url 'dashboard' %}" class="mt-4">
+          {% csrf_token %}
+          <button type="submit" name="action" value="become_author" class="btn btn-success btn-lg">
+            <i class="bi bi-person-check"></i> Become an Author
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

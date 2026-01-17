@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Posts You {{ type|title }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="background-color: var(--card-bg-color); color: var(--card-text-color); padding: 1rem; border-radius: 8px;">
+  <h2>Posts You {{ type|title }}</h2>
+
+  {% if object_list %}
+    <div class="list-group">
+    {% for post in object_list %}
+      <div class="list-group-item mb-3 p-3 rounded shadow-sm" style="background-color: var(--card-text-color); color: var(--card-bg-color);">
+        <h4 class="fw-bold">
+          <a href="{{ post.get_absolute_url }}" style="color: var(--card-bg-color);" class="text-decoration-none">
+            {{ post.title }}
+          </a>
+        </h4>
+        <div class="text-secondary small mb-2" style="color: var(--btn-bg-color)">
+          By {{ post.author.name }} | {{ post.date_created|date:"M d, Y" }}
+        </div>
+        <p class="mb-3">{{ post.content|truncatechars_html:300|safe }}</p>
+        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
+      </div>
+    {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <nav aria-label="Page navigation" class="bg-light p-3 rounded mt-4" style="background-color: var(--card-bg-color); color: var(--card-text-color);">
+        <ul class="pagination justify-content-center mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.previous_page_number }}" class="page-link" style="color: var(--card-text-color);">&laquo; Prev</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo; Prev</span>
+            </li>
+          {% endif %}
+
+          {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+              <li class="page-item"><a href="?page={{ num }}" class="page-link" style="color: var(--card-text-color);">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.next_page_number }}" class="page-link" style="color: var(--card-text-color);">Next &raquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next &raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  {% else %}
+    <p>You haven't {{ type }} any posts yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

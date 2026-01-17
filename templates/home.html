@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - My Blog{% endblock %}
+
+{% block content %}
+
+<!-- 1. Hero Section -->
+<section class="hero-section text-center mb-4">
+    <h1 class="display-4 fw-bold text-gradient">
+        <span id="typed-output"></span>
+    </h1>
+    <p class="lead">A space where your stories matter—read blogs, share your voice, and connect through ideas.</p>
+    <a href="#posts" class="btn btn-primary btn-lg">Read Latest Posts</a>
+</section>
+
+<!-- ✍️ Author/Viewer Blog Button -->
+{% if request.user.is_authenticated %}
+<div class="text-center mb-4">
+    {% if request.user.is_author %}
+    <a href="{% url 'create_blog' %}" class="btn btn-success btn-lg">
+        ✍️ Write Your Blog
+    </a>
+    {% else %}
+    <a href="{% url 'try_blog' %}" class="btn btn-outline-success btn-lg">
+        🌱 Try Writing a Blog
+    </a>
+    <p class="form-text text-muted">
+    <h6 style="color: #0db2f4;" class="mt-2">
+        If your post resonates, you can request author access and join our creator community.
+    </h6>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Main Content + Sidebar -->
+<div class="row">
+    <!-- Main Content -->
+    <div class="col-md-8">
+        <!-- 2. Featured Post -->
+        {% if featured_post %}
+        <div class="card mb-4 shadow-sm">
+            {% if featured_post.image %}
+            <img src="{{ featured_post.image.url }}" class="card-img-top" alt="{{ featured_post.title }}">
+            {% endif %}
+
+            <div class="card-body">
+                <h2 class="card-title">{{ featured_post.title }}</h2>
+                <p class="card-text">{{ featured_post.excerpt|truncatewords:30 }}</p>
+                <a href="{% url 'blog_view' featured_post.slug %}" class="btn btn-outline-primary">Read More</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 3. Recent Blog Posts -->
+        <h3 id="posts" class="mb-3">Latest Posts</h3>
+        {% for post in post_list %}
+        <div class="card mb-4 shadow-sm">
+            {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a href="{% url 'blog_view' post.slug %}" class="text-decoration-none">{{ post.title }}</a>
+                </h4>
+                <p class="card-text">{{ post.content|truncatewords:25|safe }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'blog_view' post.slug %}" class="btn btn-sm btn-primary">Read More</a>
+                    <small class="text-muted">
+                        <strong><a href="{% url 'profiles:profile_detail' username=post.author.username  %}">{{ post.author.name }}</a></strong> &bull; {{ post.created_at|date:"M d, Y" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No posts yet. Stay tuned!</p>
+        {% endfor %}
+
+        <!-- View More Blogs Button -->
+        <div class="text-center mb-4">
+            <a href="{% url 'blog_list' %}" class="btn btn-lg btn-outline-secondary">View More Blogs</a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-md-4">
+        <div class="p-4 mb-4 bg-light rounded">
+            <h4>About Scribbly</h4>
+            <p>
+                Welcome to Scribbly, a space built for storytellers, thinkers, and curious minds. Whether you're here to
+                read
+                insightful posts or share your own experiences, this blog is yours to explore. I'm Sagar, a developer
+                passionate about coding, design, and building platforms that connect people through ideas. Dive in,
+                contribute, and be part of something meaningful.
+            </p>
+        </div>
+
+        <div class="p-4 mb-4 bg-light rounded">
+            <h4>Categories</h4>
+            <div class="d-flex flex-wrap gap-2">
+                {% for category in categories %}
+                <a href="{% url 'category_posts' category.slug %}" class="px-3 py-2 rounded-pill text-decoration-none"
+                    style="background-color: {{ category.color }}; color: black;">
+                    {{ category.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="p-4 mb-4 bg-light rounded">
+            <h4>Popular Posts</h4>
+            <ul class="list-unstyled">
+                {% for pop in popular_posts %}
+                <li><a href="{% url 'blog_view' pop.slug %}">{{ pop.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="p-4 mb-4 bg-light rounded">
+            <h4>Subscribe</h4>
+            <form>
+                <input type="email" class="form-control mb-2" placeholder="Your email">
+                <button class="btn btn-sm btn-primary w-100">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new Typed("#typed-output", {
+            strings: [
+                "Discover. Write. Inspire.",
+                "Share your voice with the world.",
+                "Read blogs that spark ideas.",
+                "Your ideas, your blog. Begin now."
+            ],
+            typeSpeed: 80,
+            backSpeed: 45,
+            backDelay: 1250,
+            loop: true
+        });
+    });
+</script>
+
+{% endblock %}
