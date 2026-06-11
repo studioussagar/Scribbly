@@ -53,9 +53,10 @@
       <!-- Actions -->
       <div class="d-flex align-items-center gap-2 ms-auto">
         {% if request.user == profile_user %}
-          <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">Dashboard</a>
-          <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm">Write Post</a>
-          <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+          <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square me-1"></i>Write Post</a>
+          <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-person-gear me-1"></i>Edit Profile</a>
+          <a href="{% url 'password_change' %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-key me-1"></i>Change Password</a>
 
           <!-- Default avatars chooser (modal trigger) -->
           <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#defaultAvatarModal">
@@ -69,7 +70,7 @@
               {% if profile_user in request.user.profile.following.all %}Following{% else %}Follow{% endif %}
             </button>
           </form>
-          <a href="{% url 'profiles:message_user' target_username=profile_user.username %}" class="btn btn-outline-secondary btn-sm">Message</a>
+          <a href="{% url 'profiles:message_user' target_username=profile_user.username %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-chat-dots me-1"></i>Message</a>
         {% endif %}
       </div>
     </div>
@@ -136,11 +137,11 @@
             <div class="stat-label">Posts</div>
           </div>
           <div class="stat">
-            <div class="stat-value">{{ profile_user.posts.aggregate_likes|default:0 }}</div>
+            <div class="stat-value">{{ aggregate.aggregate_likes|default:0 }}</div>
             <div class="stat-label">Total Likes</div>
           </div>
           <div class="stat">
-            <div class="stat-value">{{ profile_user.posts.aggregate_dislikes|default:0 }}</div>
+            <div class="stat-value">{{ aggregate.aggregate_dislikes|default:0 }}</div>
             <div class="stat-label">Dislikes</div>
           </div>
           <div class="stat">
@@ -156,7 +157,7 @@
         <div class="card-body">
           <h5 class="card-title mb-3">Recent Activity</h5>
           <ul class="list-unstyled mb-0">
-            {% for a in profile_user.profile.recent_activity %}
+            {% for a in recent_activity %}
               {% if request.user == profile_user or not a.private %}
                 <li class="activity-row d-flex justify-content-between py-2">
                   <span>{{ a.text|safe }}</span>

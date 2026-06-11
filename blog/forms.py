@@ -71,13 +71,13 @@ class CustomSignupForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['name', 'username', 'email', 'password', 'role']
+        fields = ['name', 'username', 'email', 'password']  # role removed — all new users are Viewers
 
     def clean_username(self):
-        username = self.cleaned_data.get('username')
-        if not re.match(r'^[a-zA-Z0-9_]+$', username):
+        username = self.cleaned_data.get('username', '').lower()  # enforce lowercase
+        if not re.match(r'^[a-z0-9_]+$', username):
             raise ValidationError("Username can only contain letters, numbers, and underscores.")
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username__iexact=username).exists():
             raise ValidationError("Username is already taken.")
         return username
 
@@ -108,6 +108,9 @@ class CustomSignupForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
+        user.role = 'viewer'  # all new registrations are Viewers
+        user.username = self.cleaned_data['username'].lower()  # ensure lowercase persisted
+        user.is_active = False # Require email verification
         if commit:
             user.save()
         return user

@@ -1,40 +1,51 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}Dashboard - Scribbly{% endblock %}
 {% block content %}
 <div class="dashboard container mt-5">
 
   <!-- Add liked/disliked posts links for all users -->
   <div class="mb-3">
-    <a href="{% url 'liked_posts' %}" class="btn btn-outline-primary me-2">Liked Posts</a>
-    <a href="{% url 'disliked_posts' %}" class="btn btn-outline-danger">Disliked Posts</a>
-    <a href="{% url 'shared_posts' %}" class="btn btn-outline-secondary">Shared Posts</a>
+    <a href="{% url 'liked_posts' %}" class="btn btn-outline-primary me-2"><i class="bi bi-heart-fill me-1"></i>Liked Posts</a>
+    <a href="{% url 'disliked_posts' %}" class="btn btn-outline-danger me-2"><i class="bi bi-heartbreak-fill me-1"></i>Disliked Posts</a>
+    <a href="{% url 'shared_posts' %}" class="btn btn-outline-secondary"><i class="bi bi-share-fill me-1"></i>Shared Posts</a>
   </div>
 
   {% if request.user.is_author %}
     <!-- Author Dashboard Card -->
     <div class="card shadow mb-4">
-      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h2 class="mb-0">Author Dashboard</h2>
-        <a href="{% url 'create_blog' %}" class="btn btn-warning"><i class="bi bi-plus-circle"></i> Create Blog</a>
+      <div class="card-header border-bottom d-flex justify-content-between align-items-center" style="border-color: rgba(128, 128, 128, 0.2) !important;">
+        <h2 class="mb-0 fw-bold">Author Dashboard</h2>
+        <a href="{% url 'create_blog' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Blog</a>
       </div>
       <div class="card-body row">
         <div class="col-md-8">
           <h4>Your Blog Posts <small class="text-muted">(Sorted by Likes)</small></h4>
-          <table class="table table-hover table-dark rounded">
+          <table class="table table-hover rounded" style="color: inherit;">
             <thead>
               <tr>
                 <th>Title</th>
+                <th>Status</th>
                 <th>Likes</th>
-                <th>Dislikes</th>  <!-- New Dislike column -->
+                <th>Dislikes</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for post in user_posts %}
                 <tr>
-                  <td>{{ post.title }}</td>
+                  <td><a href="{% url 'blog_view' post.slug %}" class="text-decoration-none">{{ post.title }}</a></td>
+                  <td>
+                    {% if post.status == 1 %}
+                      <span class="badge bg-success">Published</span>
+                    {% elif post.status == 0 %}
+                      <span class="badge bg-secondary">Draft</span>
+                    {% else %}
+                      <span class="badge bg-warning text-dark">Pending Review</span>
+                    {% endif %}
+                  </td>
                   <td><span class="badge bg-success">{{ post.total_likes }}</span></td>
-                  <td><span class="badge bg-danger">{{ post.total_dislikes }}</span></td>  <!-- Dislike count -->
+                  <td><span class="badge bg-danger">{{ post.total_dislikes }}</span></td>
                   <td>
                     <a href="{% url 'edit_post' post.slug %}" class="btn btn-outline-info btn-sm"><i class="bi bi-pencil"></i> Edit</a>
                     <form action="{% url 'delete_post' post.slug %}" method="post" class="d-inline">
@@ -45,7 +56,7 @@
                 </tr>
               {% empty %}
                 <tr>
-                  <td colspan="4" class="text-center">No posts available.</td>
+                  <td colspan="5" class="text-center">No posts yet. <a href="{% url 'create_blog' %}">Create your first post!</a></td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -56,10 +67,12 @@
           <ul class="list-group">
             {% for comment in recent_comments %}
               <li class="list-group-item">
-                <strong>{{ comment.author.name }}</strong>: {{ comment.content|truncatewords:15 }}
+                <strong>{{ comment.user.name }}</strong>
+                <a href="{% url 'blog_view' comment.post.slug %}" class="text-muted small ms-1">(on {{ comment.post.title|truncatewords:5 }})</a>
+                <br><span class="small">{{ comment.content|truncatewords:12 }}</span>
               </li>
             {% empty %}
-              <li class="list-group-item">No recent comments.</li>
+              <li class="list-group-item text-muted">No recent comments.</li>
             {% endfor %}
           </ul>
         </div>
@@ -69,14 +82,14 @@
   {% else %}
     <!-- Viewer Dashboard Card -->
     <div class="card shadow mb-5">
-      <div class="card-header bg-info text-white">
-        <h2 class="mb-0">Viewer Dashboard</h2>
+      <div class="card-header border-bottom" style="border-color: rgba(128, 128, 128, 0.2) !important;">
+        <h2 class="mb-0 fw-bold">Viewer Dashboard</h2>
       </div>
       <div class="card-body">
         <p class="lead">Want to become a Author and write your own Blog<br>You can submit blogs for review and become ONE.</p>
         <div class="btn-group mb-4">
-          <a href="{% url 'try_blog' %}" class="btn btn-primary">Submit Blog for Review</a>
-          <a href="{% url 'blog_list' %}" class="btn btn-outline-secondary">Browse Posts</a>
+          <a href="{% url 'try_blog' %}" class="btn btn-primary"><i class="bi bi-file-earmark-text me-1"></i>Submit Blog for Review</a>
+          <a href="{% url 'blog_list' %}" class="btn btn-outline-secondary"><i class="bi bi-journal-richtext me-1"></i>Browse Posts</a>
         </div>
 
         <div class="mt-4">

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Messages - Scribbly{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-lg-5">
+    <div class="messenger-container">
+        
+        <!-- LEFT SIDEBAR -->
+        <div class="messenger-sidebar">
+            <div class="messenger-sidebar-header">
+                {{ request.user.name }}
+            </div>
+            <div class="messenger-list">
+                {% if conversations %}
+                    {% for convo in conversations %}
+                        {% if convo.user1 == request.user %}
+                            <a href="{% url 'profiles:message_user' target_username=convo.user2.username %}" class="convo-item">
+                                <div class="convo-avatar">
+                                    {% if convo.user2.profile.avatar %}
+                                        <img src="{{ convo.user2.profile.avatar.url }}" alt="{{ convo.user2.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ convo.user2.name.0|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="convo-info">
+                                    <div class="convo-name">{{ convo.user2.name }}</div>
+                                    <div class="convo-preview">
+                                        {% if convo.last_message %}
+                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
+                                        {% else %}
+                                            <em>Start a conversation</em>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'profiles:message_user' target_username=convo.user1.username %}" class="convo-item">
+                                <div class="convo-avatar">
+                                    {% if convo.user1.profile.avatar %}
+                                        <img src="{{ convo.user1.profile.avatar.url }}" alt="{{ convo.user1.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ convo.user1.name.0|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="convo-info">
+                                    <div class="convo-name">{{ convo.user1.name }}</div>
+                                    <div class="convo-preview">
+                                        {% if convo.last_message %}
+                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
+                                        {% else %}
+                                            <em>Start a conversation</em>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-4" style="color: var(--text-muted-color);">
+                        No messages yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT MAIN AREA (Inbox Empty State) -->
+        <div class="messenger-main hidden-mobile">
+            <div class="messenger-empty">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+                <h4 class="mb-2" style="font-weight: 600;">Your messages</h4>
+                <p style="color: var(--text-muted-color);">Send a message to start a chat.</p>
+                <!-- Usually a 'Send message' button exists here, but for now we rely on the users' profiles -->
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

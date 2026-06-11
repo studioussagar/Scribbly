@@ -16,24 +16,24 @@
             By {{ post.author.username }} | {{ post.date_created|date:"M d, Y" }}
           </div>
           <div>
-            {{ post.content|truncatechars_html:300|safe }}
+            {{ post.text_preview }}
           </div>
-          <a href="{% url 'blog_view' post.slug %}" class="btn btn-primary mt-2">Read More</a>
+          <a href="{% url 'blog_view' post.slug %}" class="btn btn-primary mt-2"><i class="bi bi-book-half me-1"></i>Read More</a>
 
           <!-- Share Link and Copy button -->
           <div class="mt-3 d-flex gap-2">
-            <input type="text" id="share-link-{{ post.id }}" 
-                   value="{{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" 
-                   readonly style="width:80%;" class="form-control form-control-sm">
-            <button onclick="copyLink({{ post.id }})" class="btn btn-secondary btn-sm">Copy Link</button>
+            <input type="text" id="copy-link-{{ post.id }}"
+                   value="{{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}"
+                   readonly style="display:none;" class="form-control form-control-sm">
+            <button onclick="copyLink({{ post.id }})" class="btn btn-secondary btn-sm"><i class="bi bi-link me-1"></i>Copy Link</button>
           </div>
 
           <!-- Social share buttons -->
           <div class="mt-2 d-flex gap-2">
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" 
-               target="_blank" class="btn btn-outline-primary btn-sm">Facebook</a>
-            <a href="https://twitter.com/share?url={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" 
-               target="_blank" class="btn btn-outline-info btn-sm">Twitter</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}"
+               target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-facebook me-1"></i>Facebook</a>
+            <a href="https://twitter.com/share?url={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}&text=Check out this awesome post!"
+               target="_blank" class="btn btn-outline-info btn-sm"><i class="bi bi-twitter me-1"></i>Twitter</a>
           </div>
         </div>
       {% endfor %}

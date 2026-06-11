@@ -15,17 +15,29 @@
                 </div>
                 <div class="card-body">
                     {% for comment in post.comments.all %}
+                        {% if not comment.parent %}
                         <div class="border rounded p-3 mb-2">
                             <strong>{{ comment.user.name }}</strong>
                             <small class="text-muted">{{ comment.date_created|date:"M d, Y H:i" }}</small>
-                            <p>{{ comment.content }}</p>
+                            <p class="mb-1">{{ comment.content }}</p>
+                            
+                            <div class="ms-4 mt-2">
+                                {% for reply in comment.replies.all %}
+                                <div class="border-start border-2 ps-3 mb-2 pe-0 pb-0 shadow-none border-secondary">
+                                    <strong>{{ reply.user.name }}</strong>
+                                    <small class="text-muted">{{ reply.date_created|date:"M d, Y H:i" }}</small>
+                                    <p class="mb-0">{{ reply.content }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
+                        {% endif %}
                     {% empty %}
                         <p>No comments.</p>
                     {% endfor %}
                 </div>
                 <div class="card-footer">
-                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm">Read Post</a>
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm"><i class="bi bi-file-text me-1"></i>Read Post</a>
                 </div>
             </div>
         {% endfor %}

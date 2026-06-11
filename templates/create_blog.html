@@ -10,7 +10,7 @@ Write a Blog - Scribbly
 {% endblock %}
 
 {% block head_extra %}
-<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script src="{% static 'tinymce/js/tinymce/tinymce.min.js' %}"></script>
 <style>
   input, select, textarea {
     background-color: var(--card-text-color) !important; /* use card text as background */
@@ -55,6 +55,7 @@ Write a Blog - Scribbly
     tinymce.init({
       selector: '#id_content',
       height: 600,
+      license_key:'gpl',
       plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
       toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image media link | help',
       menubar: false,
@@ -148,15 +149,11 @@ Write a Blog - Scribbly
             <!-- Submit Button -->
             <div class="text-center mt-4">
               {% if form.instance.pk %}
-              <button type="submit" class="btn btn-primary btn-lg">
-                Save Changes
-              </button>
+              <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-pencil-square me-2"></i>Save Changes</button>
+              {% elif request.user.is_author %}
+              <button type="submit" class="btn btn-success btn-lg"><i class="bi bi-cloud-arrow-up me-2"></i>Publish Blog</button>
               {% else %}
-              {% if request.user.is_author %}
-              <button type="submit" class="btn btn-success btn-lg">Publish Blog</button>
-              {% else %}
-              <button type="submit" class="btn btn-outline-success btn-lg">Submit for Review</button>
-              {% endif %}
+              <button type="submit" class="btn btn-outline-success btn-lg"><i class="bi bi-file-earmark-check me-2"></i>Submit for Review</button>
               {% endif %}
             </div>
           </form>

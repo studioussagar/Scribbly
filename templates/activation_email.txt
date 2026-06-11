@@ -1,0 +1,12 @@
+Hi {{ user.name }},
+
+Thank you for signing up for Scribbly! We're excited to have you on board.
+
+To complete your registration and activate your account, please click the link below:
+
+{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+If you did not sign up for an account, please ignore this email.
+
+Thanks,
+The Scribbly Team

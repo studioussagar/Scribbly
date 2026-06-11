@@ -1,0 +1,154 @@
+body {
+    background: #111b21 !important;
+}
+.wa-chat-main {
+    max-width: 760px;
+    min-height: 80vh;
+    margin: 30px auto 0;
+    display: flex;
+    flex-direction: column;
+    background: #222e35;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(31,41,55,.19);
+    overflow: hidden;
+    border: 1px solid #26333c;
+}
+.wa-header {
+    flex-shrink: 0;
+    height: 66px;
+    padding: 0 22px;
+    background: #202c33;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1.5px solid #182229;
+}
+.wa-avatar {
+    background: linear-gradient(116deg, #0ee290 0, #165abc 100%);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.07rem;
+    margin-right: 12px;
+}
+.wa-title { color: #e9edef; font-size: 1.22rem; font-weight: 700; margin-bottom: 0;}
+.wa-status { color: #53bdeb; font-size: 0.94rem; }
+.wa-back-link {
+    margin-left: auto;
+}
+.wa-back-link a, .wa-back-link a:visited {
+    color: #53bdeb;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.07rem;
+    border-radius: 7px;
+    padding: 7px 18px;
+    border: none;
+    background: transparent;
+    transition: background .19s;
+}
+.wa-back-link a:hover { background: #182229; color: #fff;}
+.wa-chat-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 32px 20px 18px 20px;
+    background: url('/static/img/whatsapp-bg.png') repeat center center #222e35;
+    background-size: cover;
+    position: relative;
+}
+.wa-message-row {
+    display: flex;
+    margin-bottom: 15px;
+    transition: background .14s;
+    position: relative;
+}
+.wa-message-row.sent { justify-content: flex-end;}
+.wa-message-row.received{ justify-content: flex-start;}
+.wa-message-bubble {
+    max-width: 68vw;
+    padding: 12px 19px 9px 15px;
+    border-radius: 9.5px 9.5px 9.5px 0;
+    font-size: 1.03rem;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.04);
+    word-break:break-word;
+    white-space:pre-line;
+    min-width: 44px;
+}
+.wa-message-row.sent .wa-message-bubble {
+    background: #005c4b;
+    color: #fff;
+    border-bottom-right-radius: 2.5px;
+    margin-left: 48px;
+}
+.wa-message-row.received .wa-message-bubble {
+    background: #202c33;
+    color: #e9edef;
+    border-bottom-left-radius: 3px;
+}
+.wa-meta-info {
+    font-size: .82rem;
+    color: #8696a0;
+    text-align: right;
+    margin-top: 1px;
+}
+.wa-message-row.sent .wa-meta-info { color: #9be5e0;}
+.wa-message-row.received .wa-meta-info{ color: #788790;}
+.wa-no-messages {
+    text-align: center;
+    color: #97a5b2;
+    margin: 100px 0 50px 0;
+    font-size: 1.1em;
+}
+.wa-typing-indicator {
+    color: #53bdeb;
+    font-style: italic;
+    font-size: 0.98em;
+    margin: 10px 0 2px 10px;
+    display: none;
+}
+.wa-message-form {
+    flex-shrink: 0;
+    background: #202c33;
+    border-top: 1.5px solid #182229;
+    padding: 10px 18px 10px 18px;
+    display: flex; gap:13px;
+    align-items: center;
+}
+.wa-message-form textarea {
+    flex: 1 1 auto; 
+    border-radius: 7px;
+    border: 1.2px solid #49545f;
+    font-size: 1.01rem;
+    resize: none;
+    padding: 10px 12px;
+    color: #dedede;
+    background: #111b21;
+    min-height: 39px; max-height: 150px; 
+    font-family: inherit;
+    transition: border .17s;
+    margin-bottom:0;
+}
+.wa-message-form textarea:focus { border-color: #2aa97c;}
+.wa-send-btn {
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg,#25d366 0,#2aaf57 99%);
+    color: #fff;
+    padding: 9px 21px;
+    font-size: 1.13rem;
+    font-weight: 600;
+    box-shadow: 0 2px 10px 0 #1f893d0e;
+    transition: background .18s,box-shadow .13s;
+}
+.wa-send-btn:hover { background: linear-gradient(120deg,#25d366 0,#159e40 100%);}
+@media (max-width: 800px) {.wa-chat-main {max-width:99vw;} .wa-header{padding:0 10px;}}
+@media (max-width:600px) {
+    .wa-chat-container {padding:0;}
+    .wa-chat-main {border-radius:0;}
+    .wa-chat-body {padding:22px 2vw 15px 2vw;}
+}

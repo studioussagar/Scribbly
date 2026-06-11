@@ -5,518 +5,151 @@
 
 {% block extra_css %}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<style>
-/* Modern Chat UI - Compatible with Light/Dark Themes */
-
-/* Chat Container */
-.chat-container {
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto;
-    height: 85vh;
-    display: flex;
-    flex-direction: column;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
-
-/* Light Theme Chat Container */
-[data-theme="light"] .chat-container {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-/* Dark Theme Chat Container */
-[data-theme="dark"] .chat-container {
-    background: linear-gradient(135deg, #1a1d29 0%, #232938 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Chat Header */
-.chat-header {
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid;
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-[data-theme="light"] .chat-header {
-    background: rgba(255, 255, 255, 0.9);
-    border-bottom-color: rgba(0, 0, 0, 0.08);
-    color: #1a1d29;
-}
-
-[data-theme="dark"] .chat-header {
-    background: rgba(26, 29, 41, 0.9);
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    color: #e4e6ea;
-}
-
-.chat-header .user-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #00d4aa, #00a3ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    text-transform: uppercase;
-    position: relative;
-}
-
-.chat-header .user-info h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.chat-header .user-info .status {
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 0;
-}
-
-.chat-header .home-btn {
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-[data-theme="light"] .chat-header .home-btn {
-    color: #007bff;
-    background: rgba(0, 123, 255, 0.1);
-}
-
-[data-theme="light"] .chat-header .home-btn:hover {
-    background: rgba(0, 123, 255, 0.2);
-    color: #0056b3;
-}
-
-[data-theme="dark"] .chat-header .home-btn {
-    color: #00d4aa;
-    background: rgba(0, 212, 170, 0.1);
-}
-
-[data-theme="dark"] .chat-header .home-btn:hover {
-    background: rgba(0, 212, 170, 0.2);
-    color: #00a3ff;
-}
-
-/* Messages Area */
-.chat-messages {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    scroll-behavior: smooth;
-}
-
-[data-theme="light"] .chat-messages {
-    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-}
-
-[data-theme="dark"] .chat-messages {
-    background: linear-gradient(180deg, #1a1d29 0%, #232938 100%);
-}
-
-/* Custom Scrollbar */
-.chat-messages::-webkit-scrollbar {
-    width: 6px;
-}
-
-[data-theme="light"] .chat-messages::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="dark"] .chat-messages::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="light"] .chat-messages::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-}
-
-[data-theme="dark"] .chat-messages::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-}
-
-/* Message Bubbles */
-.message-bubble {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 18px;
-    position: relative;
-    word-wrap: break-word;
-    font-size: 14px;
-    line-height: 1.4;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-}
-
-.message-bubble:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Incoming Messages */
-.message-bubble.incoming {
-    align-self: flex-start;
-    border-bottom-left-radius: 6px;
-}
-
-[data-theme="light"] .message-bubble.incoming {
-    background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
-    color: #1a1d29;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="dark"] .message-bubble.incoming {
-    background: linear-gradient(135deg, #2d3748 0%, #374151 100%);
-    color: #e4e6ea;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Outgoing Messages */
-.message-bubble.outgoing {
-    align-self: flex-end;
-    border-bottom-right-radius: 6px;
-}
-
-[data-theme="light"] .message-bubble.outgoing {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-[data-theme="dark"] .message-bubble.outgoing {
-    background: linear-gradient(135deg, #00d4aa 0%, #00a3ff 100%);
-    color: white;
-}
-
-/* Message Meta Info */
-.message-meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
-    font-size: 11px;
-    opacity: 0.7;
-}
-
-.message-time {
-    font-size: 11px;
-    opacity: 0.8;
-}
-
-.message-status {
-    font-size: 12px;
-}
-
-/* Read receipts */
-.message-status.read {
-    color: #00d4aa;
-}
-
-.message-status.delivered {
-    opacity: 0.6;
-}
-
-/* Input Area */
-.chat-input-container {
-    padding: 16px 20px;
-    border-top: 1px solid;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    backdrop-filter: blur(10px);
-}
-
-[data-theme="light"] .chat-input-container {
-    background: rgba(255, 255, 255, 0.95);
-    border-top-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="dark"] .chat-input-container {
-    background: rgba(26, 29, 41, 0.95);
-    border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-.chat-input-wrapper {
-    flex: 1;
-    position: relative;
-}
-
-.chat-input {
-    width: 100%;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 24px;
-    font-size: 14px;
-    font-family: inherit;
-    resize: none;
-    outline: none;
-    transition: all 0.2s ease;
-    max-height: 120px;
-    min-height: 44px;
-}
-
-[data-theme="light"] .chat-input {
-    background: rgba(0, 0, 0, 0.04);
-    color: #1a1d29;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .chat-input:focus {
-    background: white;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-[data-theme="dark"] .chat-input {
-    background: rgba(255, 255, 255, 0.06);
-    color: #e4e6ea;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .chat-input:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: #00d4aa;
-    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
-}
-
-.chat-input::placeholder {
-    opacity: 0.6;
-}
-
-/* Send Button */
-.send-button {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 18px;
-}
-
-[data-theme="light"] .send-button {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-[data-theme="dark"] .send-button {
-    background: linear-gradient(135deg, #00d4aa 0%, #00a3ff 100%);
-    color: white;
-}
-
-.send-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-.send-button:active {
-    transform: scale(0.95);
-}
-
-/* Online status indicator */
-.online-indicator {
-    width: 12px;
-    height: 12px;
-    background: #4ade80;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    border: 2px solid;
-}
-
-[data-theme="light"] .online-indicator {
-    border-color: white;
-}
-
-[data-theme="dark"] .online-indicator {
-    border-color: #1a1d29;
-}
-
-/* Animation for new messages */
-@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.message-bubble.new {
-    animation: messageSlideIn 0.3s ease-out;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .chat-container {
-        max-width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        margin: 0;
-    }
-    
-    .message-bubble {
-        max-width: 85%;
-    }
-    
-    .chat-header {
-        padding: 12px 16px;
-    }
-    
-    .chat-messages {
-        padding: 16px;
-    }
-    
-    .chat-input-container {
-        padding: 12px 16px;
-    }
-}
-</style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="chat-container">
-        <!-- Chat Header -->
-        <div class="chat-header">
-            <div class="user-avatar">
-                {% if other_user.profile.avatar %}
-                    <img src="{{ other_user.profile.avatar.url }}" alt="{{ other_user.name }}" 
-                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                {% else %}
-                    {{ other_user.name.0|upper }}
-                {% endif %}
-                <div class="online-indicator"></div>
+<div class="container-fluid py-4 px-lg-5">
+    <div class="messenger-container">
+
+        <!-- LEFT SIDEBAR -->
+        <div class="messenger-sidebar hidden-mobile">
+            <div class="messenger-sidebar-header">
+                {{ request.user.name }}
             </div>
-            <div class="user-info">
-                <h3>{{ other_user.name }}</h3>
-                <p class="status">Online</p>
-            </div>
-            <a href="{% url 'home_view' %}" class="home-btn ms-auto">
-                <i class="fas fa-home me-1"></i>Home
-            </a>
-        </div>
-        
-        <!-- Messages Area -->
-        <div class="chat-messages" id="chat-messages">
-            {% if messages %}
-                {% for message in messages %}
-                <div class="message-bubble {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}">
-                    {{ message.text|linebreaks }}
-                    <div class="message-meta">
-                        <span class="message-time">{{ message.created_at|date:"H:i" }}</span>
-                        {% if message.sender == request.user %}
-                            <span class="message-status read">✓✓</span>
+            <div class="messenger-list">
+                {% if conversations %}
+                    {% for convo in conversations %}
+                        {% if convo.user1 == request.user %}
+                            <a href="{% url 'profiles:message_user' target_username=convo.user2.username %}" class="convo-item {% if convo.user2.username == other_user.username %}active{% endif %}">
+                                <div class="convo-avatar">
+                                    {% if convo.user2.profile.avatar %}
+                                        <img src="{{ convo.user2.profile.avatar.url }}" alt="{{ convo.user2.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ convo.user2.name.0|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="convo-info">
+                                    <div class="convo-name">{{ convo.user2.name }}</div>
+                                    <div class="convo-preview">
+                                        {% if convo.last_message %}
+                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
+                                        {% else %}
+                                            <em>Start a conversation</em>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'profiles:message_user' target_username=convo.user1.username %}" class="convo-item {% if convo.user1.username == other_user.username %}active{% endif %}">
+                                <div class="convo-avatar">
+                                    {% if convo.user1.profile.avatar %}
+                                        <img src="{{ convo.user1.profile.avatar.url }}" alt="{{ convo.user1.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ convo.user1.name.0|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="convo-info">
+                                    <div class="convo-name">{{ convo.user1.name }}</div>
+                                    <div class="convo-preview">
+                                        {% if convo.last_message %}
+                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
+                                        {% else %}
+                                            <em>Start a conversation</em>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
                         {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-4" style="color: var(--text-muted-color);">
+                        No messages yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT MAIN AREA (Chat) -->
+        <div class="messenger-main">
+            <div class="chat-container">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <!-- Mobile back button to show sidebar -->
+                    <a href="{% url 'profiles:inbox' %}" class="btn btn-sm btn-outline-secondary d-md-none me-2 p-1" style="border:none;">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="user-avatar" style="width:40px; height:40px;">
+                        {% if other_user.profile.avatar %}
+                            <img src="{{ other_user.profile.avatar.url }}" alt="{{ other_user.name }}" 
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        {% else %}
+                            {{ other_user.name.0|upper }}
+                        {% endif %}
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div class="user-info">
+                        <h3 class="mb-0 fs-6">{{ other_user.name }}</h3>
+                        <p class="status mb-0" style="font-size:11px;">View Profile</p>
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="text-muted text-center">
-                        <i class="fas fa-comments fa-3x mb-3 opacity-50"></i>
-                        <p>Start a conversation with {{ other_user.name }}!</p>
-                    </div>
+                
+                <!-- Messages Area -->
+                <div class="chat-messages" id="chat-messages">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="message-bubble {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}" data-id="{{ message.id }}">
+                            {{ message.text|linebreaks }}
+                            <div class="message-meta">
+                                <span class="message-time">{{ message.created_at|date:"H:i" }}</span>
+                                {% if message.sender == request.user %}
+                                    <span class="message-status read">✓✓</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <div class="text-muted text-center">
+                                <i class="fas fa-comments fa-2x mb-2 opacity-50"></i>
+                                <p style="font-size:14px;">Start a conversation with {{ other_user.name }}!</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
-        
-        <!-- Input Area -->
-        <div class="chat-input-container">
-            <form method="post" class="w-100 d-flex align-items-center gap-3" id="chat-form">
-                {% csrf_token %}
-                <div class="chat-input-wrapper">
-                    <textarea 
-                        class="chat-input" 
-                        name="text" 
-                        placeholder="Type a message..." 
-                        rows="1"
-                        id="message-input"
-                        required></textarea>
+                
+                <!-- Input Area -->
+                <div class="chat-input-container">
+                    <form method="post" class="w-100 d-flex align-items-center gap-2" id="chat-form">
+                        {% csrf_token %}
+                        <div class="chat-input-wrapper">
+                            <textarea 
+                                class="chat-input py-2 px-3" 
+                                name="text" 
+                                placeholder="Message..." 
+                                rows="1"
+                                id="message-input"
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="send-button" style="width:40px;height:40px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: translateX(-1px) translateY(1px);">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </form>
                 </div>
-                <button type="submit" class="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
+            </div>
         </div>
+
+        <div id="chat-data" style="display: none;" 
+            data-username="{{ request.user.username }}" 
+            data-conversation-id="{{ conversation.id }}"></div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const chatMessages = document.getElementById('chat-messages');
-    const messageInput = document.getElementById('message-input');
-    const chatForm = document.getElementById('chat-form');
-    
-    // Auto-scroll to bottom
-    function scrollToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    
-    // Initial scroll to bottom
-    scrollToBottom();
-    
-    // Auto-resize textarea
-    messageInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    });
-    
-    // Handle Enter key (send message) and Shift+Enter (new line)
-    messageInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (this.value.trim()) {
-                chatForm.submit();
-            }
-        }
-    });
-    
-    // Add animation to new messages when form is submitted
-    chatForm.addEventListener('submit', function(e) {
-        const messageText = messageInput.value.trim();
-        if (messageText) {
-            // You can add optimistic UI updates here if needed
-            setTimeout(scrollToBottom, 100);
-        }
-    });
-    
-    // Focus input on page load
-    messageInput.focus();
-    
-    // Auto-refresh messages (optional - implement with AJAX if needed)
-    // setInterval(function() {
-    //     // Fetch new messages via AJAX
-    // }, 5000);
-});
-</script>
+<script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
+
+{% block footer %}{% endblock %}

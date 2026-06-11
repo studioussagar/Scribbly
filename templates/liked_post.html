@@ -20,7 +20,7 @@ Posts You {{ type|title }}
         <div class="text-secondary small mb-2" style="color: var(--btn-bg-color)">
           By {{ post.author.name }} | {{ post.date_created|date:"M d, Y" }}
         </div>
-        <p class="mb-3">{{ post.content|truncatechars_html:300|safe }}</p>
+        <p class="mb-3">{{ post.text_preview }}</p>
         <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
       </div>
     {% endfor %}

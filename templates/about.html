@@ -1,6 +1,206 @@
-<!DOCTYPE html>
-<HTMl>
-    <head>
-        <title>About</title>
-    </head>
-</HTMl>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About - Scribbly{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Hero -->
+  <div class="text-center mb-5">
+    <img src="{% static 'img/logo_dark.png' %}" alt="Scribbly Logo" class="logo-dark mb-3"
+      style="height:70px; width:auto;">
+    <img src="{% static 'img/logo_light.png' %}" alt="Scribbly Logo" class="logo-light mb-3"
+      style="height:70px; width:auto;">
+    <h1 class="display-5 fw-bold text-gradient">About Scribbly</h1>
+    <p class="lead mx-auto" style="max-width:640px;">
+      A community-driven blogging platform where readers become writers, and every story finds its audience.
+    </p>
+  </div>
+
+  <hr class="mb-5" style="border-color: rgba(128,128,128,0.2);">
+
+  <!-- What is Scribbly -->
+  <div class="row align-items-center mb-5 g-4">
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-3"><i class="bi bi-journal-text me-2 text-primary"></i>What is Scribbly?</h2>
+      <p>
+        Scribbly is a modern blogging platform built for <strong>storytellers, thinkers, and curious minds</strong>.
+        Whether you're here to read insightful posts, engage with ideas through comments, or share your own perspective
+        with the world — Scribbly is built for you.
+      </p>
+      <p>
+        Content is organised by categories, and every post supports rich formatting thanks to an integrated
+        rich-text editor (TinyMCE), giving authors full creative control over how their stories look.
+      </p>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4 h-100">
+        <ul class="list-unstyled mb-0" style="line-height:2.2;">
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Rich-text blog creation with TinyMCE</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Post categories for easy discovery</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Like &amp; Dislike system on every post</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Threaded comment replies</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time chat between users</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Dark / Light theme toggle</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Author request system for viewers</li>
+          <li><i class="bi bi-check-circle-fill text-success me-2"></i>Responsive — works on any device</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="mb-5">
+    <h2 class="fw-bold text-center mb-4"><i class="bi bi-gear me-2 text-primary"></i>How It Works</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm p-4">
+          <i class="bi bi-person-plus-fill fs-1 mb-3" style="color: var(--btn-bg-color);"></i>
+          <h5 class="fw-bold">Sign Up</h5>
+          <p class="text-muted small mb-0">Create a free account as a Viewer to start reading and engaging with posts.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm p-4">
+          <i class="bi bi-eye-fill fs-1 mb-3" style="color: var(--btn-bg-color);"></i>
+          <h5 class="fw-bold">Explore</h5>
+          <p class="text-muted small mb-0">Browse posts by category, like content you enjoy, comment your thoughts, and
+            share posts.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm p-4">
+          <i class="bi bi-journal-plus fs-1 mb-3" style="color: var(--btn-bg-color);"></i>
+          <h5 class="fw-bold">Try Writing</h5>
+          <p class="text-muted small mb-0">Viewers can submit a trial blog for review. If it resonates, you can request
+            Author access.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm p-4">
+          <i class="bi bi-pen-fill fs-1 mb-3" style="color: var(--btn-bg-color);"></i>
+          <h5 class="fw-bold">Publish</h5>
+          <p class="text-muted small mb-0">Authors can publish rich blogs instantly, manage their posts from the
+            dashboard, and grow their audience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Roles -->
+  <div class="mb-5">
+    <h2 class="fw-bold text-center mb-4"><i class="bi bi-people me-2 text-primary"></i>User Roles</h2>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4 h-100 border-start border-3"
+          style="border-color: var(--btn-bg-color) !important;">
+          <h4 class="fw-bold"><i class="bi bi-eye me-2"></i>Viewer</h4>
+          <p class="text-muted small">The default role for every new user.</p>
+          <ul class="mb-0">
+            <li>Read all published blog posts</li>
+            <li>Like, dislike and comment on posts</li>
+            <li>Share posts with others</li>
+            <li>Chat with other users in real time</li>
+            <li>Submit a trial blog for review</li>
+            <li>Request to become an Author</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4 h-100 border-start border-3 border-success">
+          <h4 class="fw-bold"><i class="bi bi-pen me-2"></i>Author</h4>
+          <p class="text-muted small">Earned by submitting a post that resonates with the community.</p>
+          <ul class="mb-0">
+            <li>Everything a Viewer can do</li>
+            <li>Create and publish rich-text blog posts</li>
+            <li>Upload images in blog content</li>
+            <li>Manage posts from the Author Dashboard</li>
+            <li>View likes, dislikes and recent comments at a glance</li>
+            <li>Edit or delete their own posts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About the Developer -->
+  <div class="mb-5">
+    <h2 class="fw-bold text-center mb-4"><i class="bi bi-code-slash me-2 text-primary"></i>About the Developer</h2>
+    <div class="card shadow-sm p-4 p-md-5 mx-auto" style="max-width: 720px;">
+      <div class="d-flex align-items-center gap-4 mb-4">
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--btn-bg-color);
+                    display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0;">
+          🧑‍💻
+        </div>
+        <div>
+          <h4 class="fw-bold mb-0">Sagar</h4>
+          <small class="text-muted">Full-Stack Developer · Django · Python · JavaScript</small>
+        </div>
+      </div>
+      <p>
+        Hi! I'm Sagar, a developer passionate about building platforms that connect people through ideas.
+        Scribbly started as a personal project to explore Django's full potential — from user authentication
+        and rich-text editing to real-time WebSocket chat and AJAX-powered interactivity.
+      </p>
+      <p class="mb-0">
+        The goal was simple: build something that feels <strong>premium</strong>, loads fast on any device,
+        and gives every user — reader or writer — a meaningful experience. I hope you enjoy using Scribbly
+        as much as I enjoyed building it.
+      </p>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="mb-5">
+    <h2 class="fw-bold text-center mb-4"><i class="bi bi-stack me-2 text-primary"></i>Tech Stack</h2>
+    <div class="row g-3 justify-content-center">
+      {% for tech in tech_stack %}
+      <div class="col-6 col-md-3 col-lg-2">
+        <div class="card text-center shadow-sm p-3 h-100">
+          <span class="fw-semibold small">{{ tech }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="text-center py-5">
+    <h3 class="fw-bold mb-3">Ready to dive in?</h3>
+    <p class="text-muted mb-4">Join Scribbly and be part of a growing community of readers and writers.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{% url 'home_view' %}" class="btn btn-primary btn-lg rounded-pill px-4">
+        <i class="bi bi-house me-2"></i>Go to Home
+      </a>
+      {% if not request.user.is_authenticated %}
+      <a href="{% url 'signup' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+        <i class="bi bi-person-plus me-2"></i>Create Account
+      </a>
+      {% else %}
+      <a href="{% url 'blog_list' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+        <i class="bi bi-collection me-2"></i>Browse Posts
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Fallback: render static tech stack if no Django filter is available
+  (function () {
+    const techs = ["Django", "Python", "Bootstrap 5", "JavaScript", "WebSockets (Channels)", "TinyMCE", "SQLite", "HTML & CSS"];
+    const wrap = document.querySelector('.row.g-3.justify-content-center');
+    if (wrap && wrap.children.length === 0) {
+      techs.forEach(t => {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-3 col-lg-2';
+        col.innerHTML = `<div class="card text-center shadow-sm p-3 h-100"><span class="fw-semibold small">${t}</span></div>`;
+        wrap.appendChild(col);
+      });
+    }
+  })();
+</script>
+{% endblock %}

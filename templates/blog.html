@@ -14,26 +14,28 @@
                         By <strong>{{ object.author.name }}</strong> | {{ object.date_created|date:"F j, Y" }}
                     </p>
                     <hr>
-                    <div class="card-text fs-5">
+                    <div class="card-text post-content">
                         {{ object.content|safe }}
                     </div>
                 </div>
             </div>
 
             <!-- Like, Dislike, Share, Copy Link -->
-            <div class="d-flex justify-content-start align-items-center mb-4">
-                <button class="like-button btn btn-outline-primary btn-sm me-2" data-slug="{{ object.slug }}">
-                    👍 Like (<span class="likes-count">{{ object.likes.count }}</span>)
+            <div class="d-flex flex-wrap justify-content-start align-items-center mb-4 gap-2">
+                <button class="like-button btn btn-outline-success btn-sm rounded-pill px-3 py-2 d-inline-flex align-items-center shadow-sm fw-semibold" data-slug="{{ object.slug }}">
+                    <i class="bi bi-hand-thumbs-up-fill me-2 fs-6"></i> Like 
+                    <span class="badge bg-success text-white rounded-pill ms-2 likes-count opacity-75">{{ object.likes.count }}</span>
                 </button>
-                <button class="dislike-button btn btn-outline-primary btn-sm me-2" data-slug="{{ object.slug }}">
-                    👎 Dislike (<span class="dislikes-count">{{ object.dislikes.count }}</span>)
+                <button class="dislike-button btn btn-outline-danger btn-sm rounded-pill px-3 py-2 d-inline-flex align-items-center shadow-sm fw-semibold" data-slug="{{ object.slug }}">
+                    <i class="bi bi-hand-thumbs-down-fill me-2 fs-6"></i> Dislike 
+                    <span class="badge bg-danger text-white rounded-pill ms-2 dislikes-count opacity-75">{{ object.dislikes.count }}</span>
                 </button>
 
                 <!-- Share Dropdown -->
                 <div class="btn-group me-2">
                     <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        🔄 Share
+                        <i class="bi bi-share me-1"></i>Share
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item share-site" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}{% url 'blog_view' post.slug %}" data-site="facebook" data-slug="{{ object.slug }}">Share to Facebook</a></li>
@@ -43,7 +45,7 @@
                 </div>
                 <input type="text" class="form-control btn-outline-secondary" style="max-width: 240px;" id="share-link"
                     value="{{ request.build_absolute_uri }}" readonly>
-                <button class="btn btn-outline-secondary btn-sm ms-2" type="button" id="copy-share-link">🔗 Copy Link</button>
+                <button class="btn btn-outline-secondary btn-sm ms-2" type="button" id="copy-share-link"><i class="bi bi-clipboard me-1"></i>Copy Link</button>
             </div>
 
             <!-- Comments Section -->
@@ -51,33 +53,53 @@
                 <h4>Comments</h4>
                 <!-- Comment Form -->
                 <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-between align-items-center">
-                            Leave a Comment
-                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#commentForm" aria-expanded="false" aria-controls="commentForm">▼</button>
-                        </h5>
+                    <div class="card-body p-0">
+                        <!-- Entire header is clickable -->
+                        <div class="d-flex justify-content-between align-items-center px-3 py-3"
+                             data-bs-toggle="collapse" data-bs-target="#commentForm"
+                             aria-expanded="false" aria-controls="commentForm"
+                             style="cursor:pointer; user-select:none; border-radius: inherit;">
+                            <h5 class="mb-0"><i class="bi bi-chat-left-text me-2"></i>Leave a Comment</h5>
+                            <i class="bi bi-chevron-down text-muted toggle-chevron" style="transition: transform 0.25s ease;"></i>
+                        </div>
                         <div class="collapse" id="commentForm">
-                            <form method="post" action="{% url 'add_comment' slug=object.slug %}" data-slug="{{ object.slug }}">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <textarea name="content" class="form-control" rows="4"
-                                        placeholder="Write your comment here..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Post Comment</button>
-                            </form>
+                            <div class="px-3 pb-3 pt-1">
+                                <form method="post" action="{% url 'add_comment' slug=object.slug %}" data-slug="{{ object.slug }}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <textarea name="content" class="form-control" rows="4"
+                                            placeholder="Write your comment here..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"><i class="bi bi-send me-1"></i>Post Comment</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div id="commentList">
                     {% for comment in object.comments.all %}
-                    <div class="comment-card" style="margin-bottom: 10px;margin-top: -10px;">
-                        <div class="comment-meta">
-                            <span class="comment-author"><a href="{%url 'profiles:profile_detail' username=comment.user.name %}">{{ comment.user.name }}</a></span>
-                            <small class="comment-date">{{ comment.date_created|date:"M d, Y" }}</small>
+                        {% if not comment.parent %}
+                        <div class="comment-card" style="margin-bottom: 15px;">
+                            <div class="comment-meta">
+                                <span class="comment-author"><a href="{%url 'profiles:profile_detail' username=comment.user.name %}">{{ comment.user.name }}</a></span>
+                                <small class="comment-date">{{ comment.date_created|date:"M d, Y" }}</small>
+                            </div>
+                            <p class="mb-1">{{ comment.content }}</p>
+                            <button class="btn btn-sm btn-link p-0 text-decoration-none reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+                            
+                            <div class="ms-4 mt-2">
+                                {% for reply in comment.replies.all %}
+                                <div class="comment-card mb-2 pe-0 pb-0 shadow-none border-start border-2 ps-3 border-secondary">
+                                    <div class="comment-meta">
+                                        <span class="comment-author"><a href="{%url 'profiles:profile_detail' username=reply.user.name %}">{{ reply.user.name }}</a></span>
+                                        <small class="comment-date">{{ reply.date_created|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-0">{{ reply.content }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <p class="mb-0">{{ comment.content }}</p>
-                    </div>
+                        {% endif %}
                     {% empty %}
                     <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
                     {% endfor %}
@@ -112,10 +134,23 @@ document.getElementById('copy-share-link').onclick = function () {
     setTimeout(() => { this.innerText = '🔗Copy Link'; }, 3000);
 };
 
+// Helper: show the guest login modal for 403 responses
+function showGuestModal() {
+    var el = document.getElementById('guestLoginModal');
+    if (el && window.bootstrap) {
+        var m = bootstrap.Modal.getOrCreateInstance(el);
+        m.show();
+    }
+}
+
 // Like/Dislike AJAX handlers
 document.querySelectorAll('.like-button').forEach(button => {
     button.addEventListener('click', function (e) {
         e.preventDefault();
+        if (this.disabled || this.dataset.loading) return;
+        this.dataset.loading = "true";
+        this.style.opacity = '0.7';
+        
         const slug = this.dataset.slug;
         fetch(`/like/${slug}/`, {
             method: 'POST',
@@ -123,24 +158,33 @@ document.querySelectorAll('.like-button').forEach(button => {
                 'X-CSRFToken': getCookie('csrftoken'),
                 'X-Requested-With': 'XMLHttpRequest',
             }
-        }).then(resp => resp.json())
+        }).then(resp => {
+                if (resp.status === 403) { showGuestModal(); return null; }
+                return resp.json();
+            })
             .then(data => {
+                if (!data) return;
                 if (data.liked) {
-                    this.classList.add('btn-primary');
-                    this.classList.remove('btn-outline-primary');
+                    this.classList.add('btn-success');
+                    this.classList.remove('btn-outline-success');
+                    this.querySelector('.badge').classList.replace('opacity-75', 'opacity-100');
                 } else {
-                    this.classList.add('btn-outline-primary');
-                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-outline-success');
+                    this.classList.remove('btn-success');
+                    this.querySelector('.badge').classList.replace('opacity-100', 'opacity-75');
                 }
                 this.querySelector('.likes-count').textContent = data.total_likes;
                 const dislikeBtn = document.querySelector('.dislike-button[data-slug="' + this.dataset.slug + '"]');
                 if (dislikeBtn) {
                     dislikeBtn.querySelector('.dislikes-count').textContent = data.total_dislikes;
-                    if (data.total_dislikes === 0) {
-                        dislikeBtn.classList.remove('btn-primary');
-                        dislikeBtn.classList.add('btn-outline-primary');
-                    }
+                    dislikeBtn.classList.remove('btn-danger');
+                    dislikeBtn.classList.add('btn-outline-danger');
+                    dislikeBtn.querySelector('.badge').classList.replace('opacity-100', 'opacity-75');
                 }
+            })
+            .finally(() => {
+                delete this.dataset.loading;
+                this.style.opacity = '1';
             });
     });
 });
@@ -148,6 +192,10 @@ document.querySelectorAll('.like-button').forEach(button => {
 document.querySelectorAll('.dislike-button').forEach(button => {
     button.addEventListener('click', function (e) {
         e.preventDefault();
+        if (this.disabled || this.dataset.loading) return;
+        this.dataset.loading = "true";
+        this.style.opacity = '0.7';
+
         const slug = this.dataset.slug;
         fetch(`/dislike/${slug}/`, {
             method: 'POST',
@@ -155,25 +203,63 @@ document.querySelectorAll('.dislike-button').forEach(button => {
                 'X-CSRFToken': getCookie('csrftoken'),
                 'X-Requested-With': 'XMLHttpRequest',
             }
-        }).then(resp => resp.json())
+        }).then(resp => {
+                if (resp.status === 403) { showGuestModal(); return null; }
+                return resp.json();
+            })
             .then(data => {
+                if (!data) return;
                 if (data.disliked) {
-                    this.classList.add('btn-primary');
-                    this.classList.remove('btn-outline-primary');
+                    this.classList.add('btn-danger');
+                    this.classList.remove('btn-outline-danger');
+                    this.querySelector('.badge').classList.replace('opacity-75', 'opacity-100');
                 } else {
-                    this.classList.add('btn-outline-primary');
-                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-outline-danger');
+                    this.classList.remove('btn-danger');
+                    this.querySelector('.badge').classList.replace('opacity-100', 'opacity-75');
                 }
                 this.querySelector('.dislikes-count').textContent = data.total_dislikes;
                 const likeBtn = document.querySelector('.like-button[data-slug="' + this.dataset.slug + '"]');
                 if (likeBtn) {
                     likeBtn.querySelector('.likes-count').textContent = data.total_likes;
-                    if (data.total_likes === 0) {
-                        likeBtn.classList.remove('btn-primary');
-                        likeBtn.classList.add('btn-outline-primary');
-                    }
+                    likeBtn.classList.remove('btn-success');
+                    likeBtn.classList.add('btn-outline-success');
+                    likeBtn.querySelector('.badge').classList.replace('opacity-100', 'opacity-75');
                 }
+            })
+            .finally(() => {
+                delete this.dataset.loading;
+                this.style.opacity = '1';
             });
+    });
+});
+
+// Reply button JS
+document.querySelectorAll('.reply-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const parentId = this.dataset.commentId;
+        const formContainer = document.getElementById('commentForm');
+        
+        let collapseElement = bootstrap.Collapse.getInstance(formContainer);
+        if (!collapseElement) {
+            collapseElement = new bootstrap.Collapse(formContainer, {toggle: false});
+        }
+        collapseElement.show();
+
+        const form = formContainer.querySelector('form');
+        let hiddenInput = form.querySelector('input[name="parent_id"]');
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'parent_id';
+            form.appendChild(hiddenInput);
+        }
+        hiddenInput.value = parentId;
+        
+        const textarea = form.querySelector('textarea');
+        textarea.placeholder = "Write your reply here...";
+        textarea.focus();
     });
 });
 
@@ -192,8 +278,12 @@ document.querySelectorAll('.share-site').forEach(item => {
             },
             body: JSON.stringify({ site: site }),
         })
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 403) { showGuestModal(); return null; }
+            return res.json();
+        })
         .then(data => {
+            if (!data) return;
             if (data.success) {
                 alert(`Post shared successfully on ${site}!`);
             } else {
@@ -205,5 +295,14 @@ document.querySelectorAll('.share-site').forEach(item => {
         });
     });
 });
+const commentCollapse = document.getElementById('commentForm');
+if (commentCollapse) {
+    commentCollapse.addEventListener('show.bs.collapse', () => {
+        document.querySelector('.toggle-chevron').style.transform = 'rotate(180deg)';
+    });
+    commentCollapse.addEventListener('hide.bs.collapse', () => {
+        document.querySelector('.toggle-chevron').style.transform = 'rotate(0deg)';
+    });
+}
 </script>
 {% endblock %}

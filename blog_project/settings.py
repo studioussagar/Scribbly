@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config, Csv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,24 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uf!t96s55&8ew^e7v1eehw8o2p=hofi4#$2j0gtr#oihu3k3ju'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-uf!t96s55&8ew^e7v1eehw8o2p=hofi4#$2j0gtr#oihu3k3ju')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set DJANGO_DEBUG=False in your production environment
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'blog',
-    'tinymce',  # Added for TinyMCE integration
+    # 'tinymce',  # Added for TinyMCE integration (Manually integrated)
 ]
 
 MIDDLEWARE = [
@@ -73,6 +76,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blog_project.wsgi.application'
+ASGI_APPLICATION = 'blog_project.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 # Database
@@ -131,3 +141,53 @@ AUTH_USER_MODEL = 'blog.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Redirect unauthenticated users to the app's own login page (not /accounts/login/)
+LOGIN_URL = '/login/'
+
+# -------------------------------------------------------------
+# Security Settings
+# -------------------------------------------------------------
+    # Send cookie only over HTTPS
+SESSION_COOKIE_HTTPONLY = True    # JS cannot access session cookie
+SESSION_COOKIE_SAMESITE = 'Lax'   # CSRF protection on session
+        # Send CSRF only over HTTPS
+CSRF_COOKIE_HTTPONLY = False       # JS cannot read CSRF cookie
+X_FRAME_OPTIONS = 'DENY'          # Block clickjacking iframes
+SECURE_CONTENT_TYPE_NOSNIFF = True  # No MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True    # Legacy XSS filter header
+
+if DEBUG:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+else:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False   
+if not DEBUG:
+       # Force HTTPS (prod only)
+    SECURE_HSTS_SECONDS = 31536000      # 1 year HSTS
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# -------------------------------------------------------------
+# Email Configuration
+# -------------------------------------------------------------
+EMAIL_BACKEND_TYPE = config('EMAIL_BACKEND_TYPE', default='console')
+
+if EMAIL_BACKEND_TYPE == 'smtp':
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+    EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+    EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+    DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@example.com')
+    EMAIL_TIMEOUT = 5
+else:
+    # Fallback to console for development testing
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+print("DEBUG VALUE:", DEBUG)

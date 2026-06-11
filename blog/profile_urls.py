@@ -12,6 +12,7 @@ urlpatterns = [
     path('edit/', views.ProfileEditView.as_view(), name='edit_profile'),
     # optional
     path("@/follow/<str:username>/", views.FollowToggleView.as_view(), name="toggle_follow"),
+    path("inbox/", views.InboxView.as_view(), name="inbox"),
     path("@/message/<str:target_username>/", views.MessageUserView.as_view(), name="message_user"),
     
 

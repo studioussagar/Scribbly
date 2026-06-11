@@ -6,6 +6,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.templatetags.static import static
 from django.utils import timezone
+import bleach
+from bs4 import BeautifulSoup
 
 # -------------------------------
 # Status Choices
@@ -119,9 +121,29 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             unique_slugify(self, self.title)
+            
+        if self.content:
+            allowed_tags = ['p', 'b', 'i', 'strong', 'em', 'ul', 'ol', 'li', 'a']
+            allowed_attributes = {'a': ['href', 'title']}
+            self.content = bleach.clean(
+                self.content,
+                tags=allowed_tags,
+                attributes=allowed_attributes,
+                strip=True
+            )
+
         self.full_clean()
         super().save(*args, **kwargs)
 
+    @property
+    def text_preview(self):
+        if not self.content:
+            return ""
+        soup = BeautifulSoup(self.content, 'html.parser')
+        text = soup.get_text(separator=' ')
+        if len(text) > 150:
+            return text[:147] + '...'
+        return text
 
     def __str__(self):
         return f"{self.title} by {self.author.name}"
@@ -170,6 +192,7 @@ class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
