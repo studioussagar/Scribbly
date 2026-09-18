@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Following
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <h2 class="mb-4">
+    {{ profile_user.username }} is Following
+  </h2>
+
+{% for follow in following %}
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body d-flex justify-content-between align-items-center">
+
+  <div>
+    <a href="{% url 'profiles:profile_detail' follow.following.username %}"
+       class="fw-bold text-decoration-none">
+      {{ follow.following.username }}
+    </a>
+  </div>
+
+  <a href="{% url 'profiles:profile_detail' follow.following.username %}"
+     class="btn btn-outline-primary btn-sm">
+     View Profile
+  </a>
+
+</div>
+
+  </div>
+  {% empty %}
+  <div class="alert alert-info">
+    Not following anyone yet.
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}

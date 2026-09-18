@@ -13,7 +13,10 @@ urlpatterns = [
     # optional
     path("@/follow/<str:username>/", views.FollowToggleView.as_view(), name="toggle_follow"),
     path("inbox/", views.InboxView.as_view(), name="inbox"),
+    path('notifications/',views.NotificationListView.as_view(), name='notifications'),  # Notifications view
+
     path("@/message/<str:target_username>/", views.MessageUserView.as_view(), name="message_user"),
-    
+    path( "<str:username>/followers/", views.FollowersListView.as_view(), name="followers"),
+    path( "<str:username>/following/", views.FollowingListView.as_view(), name="following"),
 
 ]

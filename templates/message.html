@@ -18,53 +18,61 @@
             </div>
             <div class="messenger-list">
                 {% if conversations %}
-                    {% for convo in conversations %}
-                        {% if convo.user1 == request.user %}
-                            <a href="{% url 'profiles:message_user' target_username=convo.user2.username %}" class="convo-item {% if convo.user2.username == other_user.username %}active{% endif %}">
-                                <div class="convo-avatar">
-                                    {% if convo.user2.profile.avatar %}
-                                        <img src="{{ convo.user2.profile.avatar.url }}" alt="{{ convo.user2.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                    {% else %}
-                                        {{ convo.user2.name.0|upper }}
-                                    {% endif %}
-                                </div>
-                                <div class="convo-info">
-                                    <div class="convo-name">{{ convo.user2.name }}</div>
-                                    <div class="convo-preview">
-                                        {% if convo.last_message %}
-                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
-                                        {% else %}
-                                            <em>Start a conversation</em>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
+                {% for convo in conversations %}
+                {% if convo.user1 == request.user %}
+                <a href="{% url 'profiles:message_user' target_username=convo.user2.username %}"
+                    class="convo-item {% if convo.user2.username == other_user.username %}active{% endif %}">
+                    <div class="convo-avatar">
+                        {% if convo.user2.profile.avatar %}
+                        <img src="{{ convo.user2.profile.avatar.url }}" alt="{{ convo.user2.name }}"
+                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         {% else %}
-                            <a href="{% url 'profiles:message_user' target_username=convo.user1.username %}" class="convo-item {% if convo.user1.username == other_user.username %}active{% endif %}">
-                                <div class="convo-avatar">
-                                    {% if convo.user1.profile.avatar %}
-                                        <img src="{{ convo.user1.profile.avatar.url }}" alt="{{ convo.user1.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                    {% else %}
-                                        {{ convo.user1.name.0|upper }}
-                                    {% endif %}
-                                </div>
-                                <div class="convo-info">
-                                    <div class="convo-name">{{ convo.user1.name }}</div>
-                                    <div class="convo-preview">
-                                        {% if convo.last_message %}
-                                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{ convo.last_message.text|truncatechars:30 }}
-                                        {% else %}
-                                            <em>Start a conversation</em>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
+                        {{ convo.user2.name.0|upper }}
                         {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div class="text-center p-4" style="color: var(--text-muted-color);">
-                        No messages yet.
                     </div>
+                    <div class="convo-info">
+                        <div class="convo-name">{{ convo.user2.name }}</div>
+                        <div class="convo-preview">
+                            {% if convo.last_message %}
+                            {% if convo.last_message.sender == request.user %}You: {% endif %}{{
+                            convo.last_message.text|truncatechars:30 }}
+                            {% else %}
+                            <em>Start a conversation</em>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+                <a href="{% url 'profiles:message_user' target_username=convo.user1.username %}"
+                    class="convo-item {% if convo.user1.username == other_user.username %}active{% endif %}">
+                    <div class="convo-avatar">
+                        {% if convo.user1.profile.avatar %}
+                        <img src="{{ convo.user1.profile.avatar.url }}" alt="{{ convo.user1.name }}"
+                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        {% else %}
+                        {{ convo.user1.name.0|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="convo-info">
+                        <div class="convo-name">{{ convo.user1.name }}</div>
+                        <div class="convo-preview">
+                            <div class="convo-preview">
+                                {% if convo.last_message %}
+                                {% if convo.last_message.sender == request.user %}You: {% endif %}
+                                {{ convo.last_message.text|truncatechars:30 }}
+                                {% else %}
+                                <em>Start a conversation</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <div class="text-center p-4" style="color: var(--text-muted-color);">
+                    No messages yet.
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -75,63 +83,76 @@
                 <!-- Chat Header -->
                 <div class="chat-header">
                     <!-- Mobile back button to show sidebar -->
-                    <a href="{% url 'profiles:inbox' %}" class="btn btn-sm btn-outline-secondary d-md-none me-2 p-1" style="border:none;">
+                    <a href="{% url 'profiles:inbox' %}" class="btn btn-sm btn-outline-secondary d-md-none me-2 p-1"
+                        style="border:none;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div class="user-avatar" style="width:40px; height:40px;">
                         {% if other_user.profile.avatar %}
-                            <img src="{{ other_user.profile.avatar.url }}" alt="{{ other_user.name }}" 
-                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <img src="{{ other_user.profile.avatar.url }}" alt="{{ other_user.name }}"
+                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         {% else %}
-                            {{ other_user.name.0|upper }}
+                        {{ other_user.name.0|upper }}
                         {% endif %}
+                        {% if other_user.profile.is_online %}
                         <div class="online-indicator"></div>
+                        {% endif %}
                     </div>
                     <div class="user-info">
                         <h3 class="mb-0 fs-6">{{ other_user.name }}</h3>
-                        <p class="status mb-0" style="font-size:11px;">View Profile</p>
+                        <p class="status mb-0" style="font-size:11px;">
+
+                            {% if other_user.profile.is_online %}
+                            <span class="text-success">
+                                ● Online
+                            </span>
+                            {% else %}
+                            <span class="text-muted">
+                                ● Offline
+                            </span>
+                            {% endif %}
+
+                        </p>
                     </div>
                 </div>
-                
+
                 <!-- Messages Area -->
                 <div class="chat-messages" id="chat-messages">
                     {% if messages %}
-                        {% for message in messages %}
-                        <div class="message-bubble {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}" data-id="{{ message.id }}">
-                            {{ message.text|linebreaks }}
-                            <div class="message-meta">
-                                <span class="message-time">{{ message.created_at|date:"H:i" }}</span>
-                                {% if message.sender == request.user %}
-                                    <span class="message-status read">✓✓</span>
-                                {% endif %}
-                            </div>
+                    {% for message in messages %}
+                    <div class="message-bubble {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}"
+                        data-id="{{ message.id }}">
+                        {{ message.text|linebreaks }}
+                        <div class="message-meta">
+                            <span class="message-time">{{ message.created_at|date:"H:i" }}</span>
+                            {% if message.sender == request.user %}
+                            <span class="message-status read">✓✓</span>
+                            {% endif %}
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     {% else %}
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <div class="text-muted text-center">
-                                <i class="fas fa-comments fa-2x mb-2 opacity-50"></i>
-                                <p style="font-size:14px;">Start a conversation with {{ other_user.name }}!</p>
-                            </div>
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <div class="text-muted text-center">
+                            <i class="fas fa-comments fa-2x mb-2 opacity-50"></i>
+                            <p style="font-size:14px;">Start a conversation with {{ other_user.name }}!</p>
                         </div>
+                    </div>
                     {% endif %}
                 </div>
-                
+
                 <!-- Input Area -->
                 <div class="chat-input-container">
                     <form method="post" class="w-100 d-flex align-items-center gap-2" id="chat-form">
                         {% csrf_token %}
                         <div class="chat-input-wrapper">
-                            <textarea 
-                                class="chat-input py-2 px-3" 
-                                name="text" 
-                                placeholder="Message..." 
-                                rows="1"
-                                id="message-input"
-                                required></textarea>
+                            <textarea class="chat-input py-2 px-3" name="text" placeholder="Message..." rows="1"
+                                id="message-input" required></textarea>
                         </div>
                         <button type="submit" class="send-button" style="width:40px;height:40px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: translateX(-1px) translateY(1px);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                style="transform: translateX(-1px) translateY(1px);">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                             </svg>
@@ -141,14 +162,13 @@
             </div>
         </div>
 
-        <div id="chat-data" style="display: none;" 
-            data-username="{{ request.user.username }}" 
+        <div id="chat-data" style="display: none;" data-username="{{ request.user.username }}"
             data-conversation-id="{{ conversation.id }}"></div>
     </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block scripts_extra %}
 <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
 

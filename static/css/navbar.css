@@ -1,0 +1,865 @@
+/* =========================
+   Navbar
+   ========================= */
+header {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-bottom: 1px solid var(--footer-border-color);
+}
+header .nav-link {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+header .fs-4 {
+    font-size: 1.75rem;
+    font-weight: 625;
+    color: var(--card-text-color);
+}
+header .nav-link.active,
+header .nav-link:hover {
+    color: var(--link-color);
+}
+
+/* Mobile Header/Navbar Enhancements */
+header {
+    padding: clamp(0.5rem, 2vw, 1rem) 0;
+}
+
+header .fs-4 {
+    font-size: clamp(1.2rem, 5vw, 1.75rem) !important;
+}
+
+/* Navbar refinements */
+.navbar-nav .nav-link {
+    transition: background-color 0.2s ease-out, color 0.2s ease-out, box-shadow 0.2s ease-out;
+    border-radius: 6px;
+    padding: 8px 16px !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.navbar .btn-outline-danger {
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease-out, color 0.2s ease-out, box-shadow 0.2s ease-out, transform 0.2s ease-out;
+    border-width: 1px;
+}
+
+.navbar .btn-outline-danger:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Logo Theme Toggling */
+.site-logo {
+    transition: opacity 0.3s ease;
+}
+.logo-dark {
+    display: block;
+}
+.logo-light {
+    display: none !important;
+}
+
+body.light-theme .logo-dark {
+    display: none !important;
+}
+body.light-theme .logo-light {
+    display: block !important;
+}
+
+/* =========================
+   Navbar Dropdown (Categories)
+   ========================= */
+.navbar .dropdown-toggle,
+.nav .dropdown-toggle,
+.nav-link.dropdown-toggle {
+    color: var(--card-text-color);
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 8px 14px;
+    transition: color 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.nav-link.dropdown-toggle:hover,
+.nav-link.dropdown-toggle:focus,
+.nav-link.dropdown-toggle[aria-expanded="true"] {
+    background-color: var(--card-bg-color);
+    color: var(--link-hover-color);
+    box-shadow: 0 0 8px var(--btn-hover-bg-color);
+    outline: none;
+}
+.dropdown-menu {
+    background-color: var(--card-bg-color);
+    color: var(--card-text-color);
+    border: 1px solid var(--footer-border-color);
+    border-radius: 12px;
+    padding: 8px 0;
+    min-width: 240px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    overflow: hidden;
+    max-height: calc(7 * 40px + 16px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-hover-bg-color) transparent;
+}
+.dropdown-menu::-webkit-scrollbar { width: 8px; }
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: var(--btn-hover-bg-color);
+    border-radius: 8px;
+}
+.dropdown-menu::-webkit-scrollbar-track { background: transparent; }
+.dropdown-item {
+    color: var(--card-text-color);
+    padding: 10px 16px;
+    font-weight: 500;
+    transition: background-color 0.15s ease-out, color 0.15s ease-out, transform 0.15s ease-out;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--btn-hover-bg-color);
+    color: var(--btn-text-color, var(--card-text-color));
+    transform: translateX(4px);
+}
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--btn-bg-color);
+    color: var(--btn-text-color, var(--card-text-color));
+}
+.dropdown-divider {
+    border-top: 1px solid var(--footer-border-color);
+    opacity: 0.6;
+}
+.dropdown-toggle::after { border-top-color: var(--card-text-color); }
+.nav-item.dropdown { margin-right: 4px; margin-left: 8px; }
+
+/* =========================
+   Collapsible Navbar Search
+   ========================= */
+
+/* Ensure toggle + reveal sit on the same row */
+.nav-search-wrap { display: flex; align-items: center; gap: 8px; }
+
+/* Hide outer decorative frames in navbar to avoid extra rectangle */
+.navbar .custom-search.container { max-width: 320px; width: 100%; margin: 0; box-shadow: none; }
+.navbar .custom-search .search-container { overflow: hidden; }
+.navbar .custom-search .search-container::before,
+.navbar .custom-search .search-container::after { display: none; }
+
+/* Reveal wrapper (closed) */
+.nav-search-reveal {
+    position: relative;
+    width: 0;
+    max-width: 360px;
+    opacity: 0;
+    transform: scaleX(0.6);
+    transform-origin: left center;
+    pointer-events: none;
+    transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Open state: controlled width (smaller to avoid being too wide) */
+.nav-search-reveal.open {
+    width: 320px;
+    opacity: 1;
+    transform: scaleX(1);
+    pointer-events: auto;
+}
+
+/* Inner search stretches to wrapper */
+.nav-search-reveal .custom-search.container { width: 100%; max-width: 100%; }
+
+/* Keep nav from wrapping unnecessarily */
+header .nav, .navbar .nav { flex-wrap: nowrap; }
+
+/* Mobile adaptation */
+@media (max-width: 576px) {
+    .nav-search-reveal.open { width: min(86vw, 320px); }
+}
+
+/* Restore Bootstrap-like pill highlighting with theme variables */
+.navbar-nav .nav-link.active,
+.navbar-nav .show > .nav-link {
+    background-color: var(--btn-bg-color) !important;
+    color: var(--btn-text-color, var(--card-text-color)) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 9999px;
+}
+
+/* Hover for non-active links */
+.navbar-nav .nav-link:not(.active):hover {
+    background-color: var(--card-bg-color);
+    color: var(--link-hover-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+/* Make sure default nav-link color uses theme text */
+.navbar-nav .nav-link, .nav .nav-link {
+    color: var(--text-color) !important;
+    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Theme-compatible icon base */
+.navbar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--card-text-color);
+    transition: color 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Make the SVG use current text color */
+.navbar-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Soft glow */
+.navbar-icon.glow {
+    text-shadow: 0 0 0 transparent;
+    filter: drop-shadow(0 0 4px var(--btn-hover-bg-color));
+}
+
+/* Hover/Focus: stronger glow */
+.navbar-icon.glow:hover,
+.navbar-icon.glow:focus {
+    color: var(--link-hover-color);
+    filter: drop-shadow(0 0 5px var(--btn-bg-color)) drop-shadow(0 0 10px var(--btn-hover-bg-color));
+}
+
+/* Active press: tighter glow */
+.navbar-icon.glow:active {
+    color: var(--link-color);
+    filter: drop-shadow(0 0 4px var(--btn-bg-color));
+}
+
+/* Optional animated pulse on hover */
+@keyframes iconPulse {
+    0%   { filter: drop-shadow(0 0 6px var(--btn-hover-bg-color)); }
+    50%  { filter: drop-shadow(0 0 12px var(--btn-bg-color)); }
+    100% { filter: drop-shadow(0 0 6px var(--btn-hover-bg-color)); }
+}
+.navbar-icon.glow.pulse:hover {
+    animation: iconPulse 1.2s ease-in-out infinite;
+}
+
+/* =========================
+   Desktop Navbar Spacing Fix
+   ========================= */
+@media (min-width: 992px) {
+    /* Compact nav links */
+    .navbar-nav .nav-link {
+        padding: 6px 12px !important;
+        font-size: 0.9rem;
+    }
+    
+    /* Reduce dropdown toggle padding */
+    .nav-link.dropdown-toggle {
+        padding: 6px 10px;
+    }
+    
+    /* Compact search toggle button */
+    #nav-search-toggle {
+        padding: 6px 10px !important;
+    }
+    
+    /* Reduce theme toggle size on desktop */
+    .toggle-switch {
+        width: 40px;
+        height: 22px;
+    }
+    .switch-label {
+        height: 22px;
+        border-radius: 11px;
+    }
+    .slider::before {
+        width: 14px;
+        height: 14px;
+        top: 2px;
+        left: 3px;
+    }
+    .checkbox:checked ~ .slider::before {
+        transform: translateX(16px);
+    }
+    
+    /* Give logo more breathing room */
+    .navbar-brand {
+        margin-right: 1rem !important;
+    }
+    
+    /* Ensure nav items don't overflow */
+    .navbar-nav {
+        gap: 0.25rem;
+    }
+    
+    /* Notification bell more compact */
+    #notificationDropdown {
+        padding: 6px 8px !important;
+    }
+    
+    /* User dropdown more compact */
+    .nav-item.dropdown:last-child .nav-link {
+        padding: 6px 10px !important;
+    }
+}
+
+/* =========================
+   Mobile Navigation - Compact Expanded Menu
+   ========================= */
+@media (max-width: 991.98px) {
+    /* Ensure navbar is positioning context */
+    .navbar {
+        position: relative;
+    }
+
+    /* Collapsed navbar container - OVERLAY */
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1040;
+        padding: 0.5rem 0.75rem;
+        background: var(--card-bg-color);
+        border-radius: 0 0 12px 12px;
+        margin-top: 0;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        border: 1px solid var(--footer-border-color);
+        border-top: none;
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Mobile dropdown overlay container - escapes scroll clipping */
+    .dropdown-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1045;
+        pointer-events: none;
+        overflow: visible;
+    }
+    .dropdown-overlay > * {
+        pointer-events: auto;
+    }
+
+    /* Nav list: vertical, compact, no full-width cards */
+    .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+        padding: 0.5rem 0;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    /* Nav links: compact list items, not cards */
+    .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 0;
+        margin: 0;
+        text-align: left;
+        background: transparent;
+        color: var(--text-color);
+        transition: background-color 0.15s ease, color 0.15s ease;
+        min-height: 44px;
+    }
+    .nav-link:hover,
+    .nav-link:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    .nav-link.active {
+        color: var(--link-color);
+        background-color: var(--bg-color);
+    }
+
+    /* Dropdown toggles: inline with chevron */
+    .nav-link.dropdown-toggle {
+        padding-right: 2rem;
+    }
+    .nav-link.dropdown-toggle::after {
+        margin-left: auto;
+        border-top-color: var(--text-color);
+        transition: transform 0.2s ease;
+    }
+    .nav-link.dropdown-toggle[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+    }
+
+    /* Dropdown menus inside mobile nav: fixed positioning via JS overlay */
+    .dropdown-menu {
+        transform: none !important;
+        width: auto;
+        min-width: 0;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 120px);
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: var(--bg-color);
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+        display: none;
+    }
+    .dropdown-menu.show { display: block; }
+
+    /* Categories dropdown: fixed overlay on mobile */
+    #categoryDropdown + .dropdown-menu {
+        background: var(--card-bg-color);
+        border: 1px solid var(--footer-border-color);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        padding: 0.5rem 0;
+        margin: 0;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+    }
+    #categoryDropdown + .dropdown-menu.show { display: block; }
+    #categoryDropdown + .dropdown-menu .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+    }
+    #categoryDropdown + .dropdown-menu .dropdown-item:hover,
+    #categoryDropdown + .dropdown-menu .dropdown-item:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+        transform: translateX(4px);
+    }
+
+    /* Notification dropdown: fixed overlay on mobile */
+    #notificationDropdown + .dropdown-menu {
+        background: var(--card-bg-color);
+        border: 1px solid var(--footer-border-color);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        padding: 0.5rem 0;
+        margin: 0;
+        width: 320px;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+    }
+    #notificationDropdown + .dropdown-menu.show { display: block; }
+    #notificationDropdown + .dropdown-menu .dropdown-header {
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        color: var(--text-color);
+        border-bottom: 1px solid var(--footer-border-color);
+        margin-bottom: 0.25rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item:hover,
+    #notificationDropdown + .dropdown-menu .dropdown-item:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-divider {
+        border-color: var(--footer-border-color);
+        margin: 0.25rem 0.5rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item.text-center {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        color: var(--link-color);
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item.text-center:hover {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+
+    /* User dropdown: fixed overlay on mobile */
+    .nav-item.dropdown:last-child .dropdown-menu {
+        background: var(--card-bg-color);
+        border: 1px solid var(--footer-border-color);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        padding: 0.5rem 0;
+        margin: 0;
+        width: 240px;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+    }
+    .nav-item.dropdown:last-child .dropdown-menu.show { display: block; }
+    .nav-item.dropdown:last-child .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    .nav-item.dropdown:last-child .dropdown-item:hover,
+    .nav-item.dropdown:last-child .dropdown-item:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    .nav-item.dropdown:last-child .dropdown-divider {
+        border-color: var(--footer-border-color);
+        margin: 0.25rem 0.5rem;
+    }
+    .nav-item.dropdown:last-child .dropdown-item.text-danger {
+        color: #ef4444;
+    }
+    .nav-item.dropdown:last-child .dropdown-item.text-danger:hover {
+        background-color: var(--bg-color);
+        color: #dc2626;
+    }
+
+    .dropdown-item {
+        padding: 0.65rem 1.5rem;
+        font-size: 0.9rem;
+        text-align: left;
+        border-radius: 0;
+        color: var(--text-color);
+    }
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: var(--card-bg-color);
+        color: var(--link-hover-color);
+        transform: translateX(4px);
+    }
+    .dropdown-divider {
+        border-color: var(--footer-border-color);
+        margin: 0.25rem 0.5rem;
+    }
+
+    /* Mobile nav row: consistent layout for theme toggle, search, and nav links */
+    .mobile-nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 0;
+        margin: 0;
+        text-align: left;
+        background: transparent;
+        color: var(--text-color);
+        transition: background-color 0.15s ease, color 0.15s ease;
+        min-height: 44px;
+        border-bottom: 1px solid var(--footer-border-color);
+    }
+    .mobile-nav-row:hover,
+    .mobile-nav-row:focus-within {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    .mobile-nav-label {
+        flex: 1;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Theme toggle: compact row at top of menu */
+    .nav-item:has(.toggle-switch) {
+        border-bottom: 1px solid var(--footer-border-color);
+        padding: 0;
+    }
+    .nav-item:has(.toggle-switch) .mobile-nav-row {
+        padding: 0.75rem 0.5rem;
+    }
+    .nav-item:has(.toggle-switch) .toggle-switch {
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+        /* Remove glow effect for cleaner integration */
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .nav-item:has(.toggle-switch) .toggle-switch:hover {
+        box-shadow: none;
+    }
+    .nav-item:has(.toggle-switch) .switch-label {
+        height: 22px;
+        border: 2px solid var(--footer-border-color);
+        background-color: var(--bg-color);
+    }
+    .nav-item:has(.toggle-switch) .slider::before {
+        width: 14px; height: 14px; top: 2px; left: 2px;
+    }
+    .nav-item:has(.toggle-switch) .checkbox:checked ~ .slider::before {
+        transform: translateX(16px);
+    }
+
+    /* Search: compact inline at top - unified input + button */
+    .nav-item:has(.custom-search) {
+        border-bottom: 1px solid var(--footer-border-color);
+        padding: 0;
+    }
+    .nav-item:has(.custom-search) .mobile-nav-row {
+        padding: 0.75rem 0.125rem;
+    }
+    .nav-item:has(.custom-search) .custom-search.container {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        border-radius: 8px;
+        flex: 1;
+    }
+    .nav-item:has(.custom-search) .search-container {
+        min-height: 40px;
+        border-radius: 8px;
+        box-shadow: none;
+        border: 1px solid var(--footer-border-color);
+        background: var(--bg-color);
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+    .nav-item:has(.custom-search) .search-container:focus-within {
+        border-color: var(--btn-bg-color);
+        box-shadow: 0 0 0 2px rgba(var(--btn-bg-color-rgb), 0.18);
+    }
+    .nav-item:has(.custom-search) .input {
+        font-size: 0.95rem;
+        height: 36px;
+        padding: 0 12px;
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        flex: 1;
+        min-width: 0;
+    }
+    .nav-item:has(.custom-search) .input::placeholder {
+        color: var(--text-muted-color);
+        opacity: 0.7;
+    }
+    .nav-item:has(.custom-search) .input:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    .nav-item:has(.custom-search) .search__icon {
+        width: 32px; height: 32px; min-width: 32px;
+        flex-shrink: 0;
+        margin-left: 0;
+        padding: 0 8px;
+        background: var(--btn-bg-color);
+        border-radius: 0 8px 8px 0;
+        color: var(--card-text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.15s ease;
+    }
+    .nav-item:has(.custom-search) .search__icon:hover {
+        background: var(--btn-hover-bg-color);
+    }
+    .nav-item:has(.custom-search) .search__icon svg {
+        stroke: currentColor;
+        fill: none;
+    }
+
+    /* Notification bell: compact nav item with label + bell */
+    #notificationDropdown {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 0;
+        margin: 0;
+        text-align: left;
+        background: transparent;
+        color: var(--text-color);
+        transition: background-color 0.15s ease, color 0.15s ease;
+        min-height: 44px;
+        border-bottom: 1px solid var(--footer-border-color);
+    }
+    #notificationDropdown:hover,
+    #notificationDropdown:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    #notificationDropdown .bi-bell { 
+        font-size: 1.25rem; 
+        flex-shrink: 0;
+    }
+    #notificationDropdown .badge { 
+        margin-left: auto;
+    }
+
+    /* Notification dropdown: fixed overlay on mobile */
+    #notificationDropdown + .dropdown-menu {
+        background: var(--card-bg-color);
+        border: 1px solid var(--footer-border-color);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        padding: 0.5rem 0;
+        margin: 0;
+        width: 320px;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+    }
+    #notificationDropdown + .dropdown-menu.show { display: block; }
+    #notificationDropdown + .dropdown-menu .dropdown-header {
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        color: var(--text-color);
+        border-bottom: 1px solid var(--footer-border-color);
+        margin-bottom: 0.25rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item:hover,
+    #notificationDropdown + .dropdown-menu .dropdown-item:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-divider {
+        border-color: var(--footer-border-color);
+        margin: 0.25rem 0.5rem;
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item.text-center {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        color: var(--link-color);
+    }
+    #notificationDropdown + .dropdown-menu .dropdown-item.text-center:hover {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+
+    /* User dropdown: compact nav item */
+    .nav-item.dropdown:last-child .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 0;
+        margin: 0;
+        text-align: left;
+        background: transparent;
+        color: var(--text-color);
+        transition: background-color 0.15s ease, color 0.15s ease;
+        min-height: 44px;
+        border-bottom: 1px solid var(--footer-border-color);
+    }
+    .nav-item.dropdown:last-child .nav-link:hover,
+    .nav-item.dropdown:last-child .nav-link:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    .nav-item.dropdown:last-child .nav-link::after {
+        margin-left: auto;
+        border-top-color: var(--text-color);
+        transition: transform 0.2s ease;
+    }
+    .nav-item.dropdown:last-child .nav-link[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+    }
+
+    /* User dropdown: fixed overlay on mobile */
+    .nav-item.dropdown:last-child .dropdown-menu {
+        background: var(--card-bg-color);
+        border: 1px solid var(--footer-border-color);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        padding: 0.5rem 0;
+        margin: 0;
+        width: 240px;
+        max-width: calc(100vw - 2rem);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+    }
+    .nav-item.dropdown:last-child .dropdown-menu.show { display: block; }
+    .nav-item.dropdown:last-child .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    .nav-item.dropdown:last-child .dropdown-item:hover,
+    .nav-item.dropdown:last-child .dropdown-item:focus {
+        background-color: var(--bg-color);
+        color: var(--link-hover-color);
+    }
+    .nav-item.dropdown:last-child .dropdown-divider {
+        border-color: var(--footer-border-color);
+        margin: 0.25rem 0.5rem;
+    }
+    .nav-item.dropdown:last-child .dropdown-item.text-danger {
+        color: #ef4444;
+    }
+    .nav-item.dropdown:last-child .dropdown-item.text-danger:hover {
+        background-color: var(--bg-color);
+        color: #dc2626;
+    }
+
+    /* Search reveal (desktop only) stays hidden */
+    .nav-search-reveal { display: none !important; }
+    #nav-search-toggle.d-none.d-lg-inline-flex { display: none !important; }
+
+    /* Hide desktop-only theme toggle in mobile menu */
+    .nav-item.me-3.d-none.d-lg-block { display: none !important; }
+}
+
+/* Extra small screens */
+@media (max-width: 375px) {
+    .navbar-collapse { padding: 0.375rem 0.5rem; }
+    .nav-link { padding: 0.65rem 0.375rem; font-size: 0.9rem; }
+    .dropdown-item { padding: 0.55rem 1.25rem; }
+    .nav-item:has(.custom-search) .input { font-size: 0.9rem; height: 34px; }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+    .nav-link {
+        padding: 8px 12px !important;
+        font-size: 0.9rem;
+    }
+    
+    .navbar-collapse .btn-group .btn {
+        min-width: 100px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .navbar-brand img {
+        height: 40px !important;
+    }
+}

@@ -1,3 +1,10 @@
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 import bleach
 
 BLEACH_ALLOWED_TAGS = [
@@ -25,15 +32,9 @@ def sanitize_html(content, strip_all=False):
         strip=True
     )
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.conf import settings
-
 def send_verification_email(request, user):
+    print("EMAIL FUNCTION CALLED")
+    print("Recipient:", user.email)
     current_site = get_current_site(request)
     mail_subject = 'Activate your Scribbly account'
     
@@ -46,13 +47,36 @@ def send_verification_email(request, user):
         'protocol': 'https' if request.is_secure() else 'http'
     }
     
+    print("RENDERING TEMPLATE")
+
     message = render_to_string('activation_email.html', context)
     
-    send_mail(
+    print("SENDING EMAIL")
+
+    result = send_mail(
         subject=mail_subject,
         message="",
         from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@example.com'),
         recipient_list=[user.email],
         fail_silently=False,
         html_message=message
+    )
+
+    print("SEND RESULT =", result)
+
+from .models import Notification
+
+def create_notification(
+    recipient,
+    actor,
+    notification_type,
+    text,
+    link=""
+):
+    return Notification.objects.create(
+        recipient=recipient,
+        actor=actor,
+        notification_type=notification_type,
+        text=text,
+        link=link
     )

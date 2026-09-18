@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'blog',
+    'blog.apps.BlogConfig',
+    'review_center',
     # 'tinymce',  # Added for TinyMCE integration (Manually integrated)
 ]
 
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'blog.context_processor.categories_processor',
+                'blog.context_processor.notification_count',
             ],
         },
     },

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.templatetags.static import static
 from django.utils import timezone
+from datetime import timedelta
 import bleach
 from bs4 import BeautifulSoup
 
@@ -122,16 +123,6 @@ class Post(models.Model):
         if not self.slug:
             unique_slugify(self, self.title)
             
-        if self.content:
-            allowed_tags = ['p', 'b', 'i', 'strong', 'em', 'ul', 'ol', 'li', 'a']
-            allowed_attributes = {'a': ['href', 'title']}
-            self.content = bleach.clean(
-                self.content,
-                tags=allowed_tags,
-                attributes=allowed_attributes,
-                strip=True
-            )
-
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -219,7 +210,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=120, blank=True)
     topics = models.ManyToManyField("blog.Category", blank=True)  # adjust to your app
-
+    last_seen = models.DateTimeField(blank=True, null=True)
     @property
     def avatar_url(self):
         if self.avatar:
@@ -227,6 +218,14 @@ class Profile(models.Model):
         if self.avatar_url_override:
             return self.avatar_url_override
         return static("img/avatar-default.png")
+    
+    @property
+    def is_online(self):
+
+        if not self.last_seen:
+           return False
+
+        return (timezone.now() - self.last_seen ) < timedelta(minutes=2)
     
 class Follow(models.Model):
     follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="following")
@@ -273,7 +272,7 @@ class Conversation(models.Model):
 
     def participants(self):
         return [self.user1, self.user2]
-
+    
     def last_message(self):
         return self.messages.order_by('-created_at').first()
 
@@ -323,3 +322,37 @@ class Message(models.Model):
 
     def __str__(self):
         return f"{self.sender.username} @ {self.created_at:%Y-%m-%d %H:%M}: {self.text[:30]}"
+
+class Notification(models.Model):
+
+    NOTIFICATION_TYPES = (
+    ("follow", "Follow"),
+    ("like", "Like"),
+    ("comment", "Comment"),
+    ("message", "Message"),
+    ("writer", "Writer"),
+    ("system", "System"),
+)
+
+    recipient = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications")
+
+    actor = models.ForeignKey( settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="sent_notifications")
+
+    notification_type = models.CharField( max_length=20, choices=NOTIFICATION_TYPES)
+
+    text = models.CharField(max_length=255)
+
+    is_read = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    link = models.CharField(
+    max_length=255,
+    blank=True
+)
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.text
+

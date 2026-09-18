@@ -23,8 +23,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("review-center/", include("review_center.urls")),  # review center URLs
     path("", include("blog.urls")),                 # existing blog URLs
     path("@", include(("blog.profile_urls", "blog"), namespace="profiles")),  # profile routes under @username
+    
 
     # Password Reset (built-in Django)
     path('password-reset/',

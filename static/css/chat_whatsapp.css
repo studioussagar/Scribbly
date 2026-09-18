@@ -1,14 +1,14 @@
 /* Modern Chat UI - Compatible with Light/Dark Themes */
 :root{
-    --cht_msg_back:linear-gradient(145deg, #1e293b, #214fac98,#1b2c46);
-    --msg_back_out:#133f78 ;
-    --msg_back_inc:#254b7d ;
+    --cht_msg_back:linear-gradient(145deg, #0F111A, #161925, #0F111A);
+    --msg_back_out:#818CF8 ;
+    --msg_back_inc:#161925 ;
 }
 
 body.light-theme{
-    --cht_msg_back:linear-gradient(45deg, #a7c8ff, #e1eafc,#a7c8ff);
-    --msg_back_out: #eef2f5;
-    --msg_back_inc:#cae2ff ;
+    --cht_msg_back:linear-gradient(45deg, #FFFFFF, #FAF9F6, #FFFFFF);
+    --msg_back_out: #D97706;
+    --msg_back_inc:#FFFFFF ;
 }
 /* Chat Container */
 .chat-container {
@@ -21,7 +21,7 @@ body.light-theme{
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+    transition: box-shadow 0.25s ease-out, border-color 0.25s ease-out;
     border: 2px solid;
     background: var(--cht_msg_back);
 }
@@ -67,11 +67,14 @@ body.light-theme{
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #00d4aa, #00a3ff);
+    background: linear-gradient(135deg, var(--btn-bg-color), var(--btn-hover-bg-color));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--btn-text-color, #1C1917);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 600;
     font-size: 18px;
     text-transform: uppercase;
@@ -143,7 +146,7 @@ body.light-theme{
     font-size: 14px;
     line-height: 1.4;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .message-bubble:hover {
@@ -175,6 +178,7 @@ body.light-theme{
     align-self: flex-end;
     border-bottom-right-radius: 6px;
     background: var(--msg_back_out);
+    color: var(--btn-text-color, #1C1917);
 }
 
 [data-theme="light"] .message-bubble.outgoing {
@@ -249,7 +253,7 @@ body.light-theme{
     font-family: inherit;
     resize: none;
     outline: none;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
     max-height: 120px;
     min-height: 44px;
 }
@@ -292,7 +296,7 @@ body.light-theme{
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     font-size: 18px;
 }
 
@@ -308,11 +312,11 @@ body.light-theme{
 
 .send-button:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(var(--btn-bg-color-rgb), 0.3);
 }
 
 .send-button:active {
-    transform: scale(0.95);
+    transform: scale(0.97);
 }
 
 /* Typing Indicator */
@@ -384,7 +388,7 @@ body.light-theme{
 @keyframes messageSlideIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -393,7 +397,7 @@ body.light-theme{
 }
 
 .message-bubble.new {
-    animation: messageSlideIn 0.3s ease-out;
+    animation: messageSlideIn 0.22s ease-out;
 }
 
 /* Online status indicator */
@@ -429,7 +433,7 @@ body.light-theme{
     border-radius: 12px;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.18s ease-out;
 }
 
 [data-theme="light"] .reaction-emoji {

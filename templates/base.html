@@ -1,355 +1,684 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Scribbly{% endblock %}</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Scribbly{% endblock %}</title>
 
-        <!-- Bootstrap, Icons, Typed -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    {% load static %}
+    <link rel="icon" href="{% static 'img/Scribbly_Favicon.ico' %}" type="image/x-icon">
 
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-        <link rel="stylesheet" href="{% static 'css/chat_whatsapp.css' %}">
+    <!-- Bootstrap, Icons, Typed -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/typography.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/messenger.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsiveness.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chat_whatsapp.css' %}">
 
-        <style>
-            html,
-            body {
-                height: 100%;
-            }
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
 
-            body {
-                display: flex;
-                flex-direction: column;
-            }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
-            main {
-                flex: 1;
-            }
-        </style>
+        main {
+            flex: 1;
+        }
+    </style>
 
-        {% block head_extra %}{% endblock %}
-    </head>
+    {% block head_extra %}{% endblock %}
+</head>
 
-    <body class="dark-theme" data-auth="{{ user.is_authenticated|yesno:'true,false' }}">
+<body class="dark-theme" data-auth="{{ user.is_authenticated|yesno:'true,false' }}">
 
-        <div class="container sticky-top" style="background:var(--bg-color); z-index:1030; padding-top:0; padding-bottom:0;">
-            <header class="mb-2 border-bottom border-2 border-primary">
-                <nav class="navbar navbar-expand-lg w-100 py-1">
-                    <div class="container-fluid px-0">
-                        <!-- Brand far left -->
-                        <a href="{% url 'home_view' %}" class="navbar-brand text-decoration-none logo-container d-flex align-items-center">
-                            <img src="{% static 'img/logo_dark.png' %}" class="site-logo logo-dark" alt="Scribbly Logo" style="height: 55px; width: auto;">
-                            <img src="{% static 'img/logo_light.png' %}" class="site-logo logo-light" alt="Scribbly Logo" style="height: 55px; width: auto; display: none;">
-                        </a>
+    <div class="container sticky-top"
+        style="background:var(--bg-color); z-index:1030; padding-top:0; padding-bottom:0;">
+        <header class="mb-2 border-bottom border-2" style="border-color: var(--btn-bg-color) !important;">
+            <nav class="navbar navbar-expand-lg w-100 py-1">
+                <div class="container-fluid px-0">
+                    <!-- Brand far left -->
+                    <a href="{% url 'home_view' %}"
+                        class="navbar-brand text-decoration-none logo-container d-flex align-items-center">
+                        <img src="{% static 'img/logo_dark.png' %}" class="site-logo logo-dark" alt="Scribbly Logo"
+                            style="height: 55px; width: auto;">
+                        <img src="{% static 'img/logo_light.png' %}" class="site-logo logo-light" alt="Scribbly Logo"
+                            style="height: 55px; width: auto; display: none;">
+                    </a>
 
-                        <!-- Mobile specific elements grouping -->
-                        <div class="d-flex align-items-center d-lg-none ms-auto me-2">
-                             <div class="toggle-switch me-2">
-                                <label class="switch-label">
-                                    <input type="checkbox" class="checkbox theme-toggle-checkbox">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </div>
+                    <!-- Mobile Toggle Button -->
+                    <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                         <!-- Mobile Toggle Button -->
-                         <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                    <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNavbar">
+                        <ul class="navbar-nav align-items-lg-center ms-auto">
+                            <!-- Theme toggler: desktop (hidden in mobile) -->
+                            <li class="nav-item me-3 d-none d-lg-block">
+                                <div class="toggle-switch">
+                                    <label class="switch-label">
+                                        <input type="checkbox" class="checkbox theme-toggle-checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </li>
 
-                        <div class="collapse navbar-collapse mt-3 mt-lg-0" id="mainNavbar">
-                            <ul class="navbar-nav align-items-lg-center ms-auto">
-                                <!-- Theme toggler desktop -->
-                                <li class="nav-item me-3 d-none d-lg-block">
+                            <!-- Search: desktop toggle + reveal (hidden in mobile) -->
+                            <li class="nav-item me-lg-3 my-2 my-lg-0 d-none d-lg-flex align-items-center">
+                                <div class="nav-search-wrap d-flex align-items-center">
+                                    <button id="nav-search-toggle"
+                                        class="btn btn-outline-secondary align-items-center navbar-icon"
+                                        aria-expanded="false" aria-controls="nav-search-reveal"
+                                        aria-label="Toggle search">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                                            <path
+                                                d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                    <div id="nav-search-reveal" class="nav-search-reveal">
+                                        <form class="custom-search container" method="get"
+                                            action="{% url 'blog_list' %}">
+                                            <div class="search-container">
+                                                <input type="text" class="input" name="q" value="{{ query }}"
+                                                    placeholder="Search…" aria-label="Search">
+                                                <button type="submit" class="search__icon" aria-label="Submit">
+                                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path
+                                                            d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                                            </path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Mobile-only: Theme toggle + Search at top of menu -->
+                            <li class="nav-item d-lg-none">
+                                <div class="mobile-nav-row">
+                                    <span class="mobile-nav-label">Theme</span>
                                     <div class="toggle-switch">
                                         <label class="switch-label">
                                             <input type="checkbox" class="checkbox theme-toggle-checkbox">
                                             <span class="slider"></span>
                                         </label>
                                     </div>
-                                </li>
-
-                                <!-- 2) Search toggle + collapsible bar -->
-                                <li class="nav-item me-lg-3 my-2 my-lg-0 w-100 w-lg-auto d-flex justify-content-lg-center">
-                                    <div class="nav-search-wrap d-flex align-items-center w-100">
-                                        <button id="nav-search-toggle"
-                                            class="btn btn-outline-secondary d-none d-lg-inline-flex align-items-center navbar-icon" aria-expanded="false"
-                                            aria-controls="nav-search-reveal" aria-label="Toggle search">
-                                            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                                                <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                </div>
+                            </li>
+                            <li class="nav-item d-lg-none">
+                                <form class="custom-search container mobile-nav-row" style="max-width:100%;margin:0;"
+                                    method="get" action="{% url 'blog_list' %}">
+                                    <span class="mobile-nav-label">Search</span>
+                                    <div class="search-container">
+                                        <input type="text" class="input" name="q" value="{{ query }}"
+                                            placeholder="Search…" aria-label="Search">
+                                        <button type="submit" class="search__icon" aria-label="Submit">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path
+                                                    d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                                </path>
                                             </svg>
                                         </button>
-                                        <div id="nav-search-reveal" class="nav-search-reveal d-none d-lg-block">
-                                            <form class="custom-search container" method="get" action="{% url 'blog_list' %}">
-                                                <div class="search-container">
-                                                    <input type="text" class="input" name="q" value="{{ query }}" placeholder="Search…" aria-label="Search">
-                                                    <button type="submit" class="search__icon" aria-label="Submit">
-                                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></svg>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="d-block d-lg-none w-100">
-                                            <form class="custom-search container w-100" style="max-width:100%;margin:0;" method="get" action="{% url 'blog_list' %}">
-                                                <div class="search-container">
-                                                    <input type="text" class="input" name="q" value="{{ query }}" placeholder="Search…" aria-label="Search">
-                                                    <button type="submit" class="search__icon" aria-label="Submit">
-                                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></svg>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
                                     </div>
-                                </li>
+                                </form>
+                            </li>
 
-                                <!-- 3) Home -->
-                                <li class="nav-item me-lg-2">
-                                    <a href="{% url 'home_view' %}" class="nav-link w-100 {% if request.resolver_match.url_name == 'home_view' %}active{% endif %}">Home</a>
-                                </li>
+                            <!-- 3) Home -->
+                            <li class="nav-item me-lg-2">
+                                <a href="{% url 'home_view' %}"
+                                    class="nav-link {% if request.resolver_match.url_name == 'home_view' %}active{% endif %}">Home</a>
+                            </li>
 
-                                <!-- 3.5) About -->
-                                <li class="nav-item me-lg-2">
-                                    <a href="{% url 'about_view' %}" class="nav-link w-100 {% if request.resolver_match.url_name == 'about_view' %}active{% endif %}">About</a>
-                                </li>
+                            <!-- 3.5) About -->
+                            <li class="nav-item me-lg-2">
+                                <a href="{% url 'about_view' %}"
+                                    class="nav-link {% if request.resolver_match.url_name == 'about_view' %}active{% endif %}">About</a>
+                            </li>
+                            <!-- 5) Categories pill -->
+                            <li class="nav-item dropdown me-lg-2">
+                                <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill" href="#"
+                                    id="categoryDropdown" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Categories</a>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
+                                    aria-labelledby="categoryDropdown">
+                                    {% for category in categories %}
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'category_posts' slug=category.slug %}">{{category }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
 
-                                <!-- 4) Dashboard -->
-                                <li class="nav-item me-lg-2">
-                                    <a href="{% url 'dashboard' %}" class="nav-link w-100 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
-                                </li>
+                                <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
 
-                                <!-- 4.5) Inbox -->
-                                {% if request.user.is_authenticated %}
-                                <li class="nav-item me-lg-2">
-                                    <a href="{% url 'profiles:inbox' %}" class="nav-link w-100 {% if 'inbox' in request.resolver_match.url_name or 'message' in request.resolver_match.url_name %}active{% endif %}">
-                                        <i class="fas fa-envelope me-1"></i> Inbox
-                                    </a>
-                                </li>
-                                {% endif %}
+                                    <i class="bi bi-bell"></i>
 
-                                <!-- 5) Categories pill -->
-                                <li class="nav-item dropdown me-lg-2">
-                                    <a class="nav-link dropdown-toggle w-100 px-3 py-2 rounded-pill" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                                    <ul class="dropdown-menu border-0 shadow-sm" aria-labelledby="categoryDropdown">
-                                        {% for category in categories %}
-                                        <li><a class="dropdown-item" href="{% url 'category_posts' slug=category.slug %}">{{category }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-
-                                <!-- 6/7) Username then Login/Logout -->
-                                {% if request.user.is_authenticated %}
-                                <li class="nav-item d-lg-flex align-items-center mt-2 mt-lg-0 px-lg-2">
-                                    <span class="d-block mb-2 mb-lg-0 me-lg-3 fw-bold fst-italic" style="font-family: 'Times New Roman';">
-                                        <a style="color: var(--text-color);" class="text-decoration-none" href="{% url 'profiles:profile_detail' username=request.user.name  %}">{{request.user.name }}</a>
+                                    {% if unread_notifications %}
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ unread_notifications }}
                                     </span>
-                                    <form method="post" action="{% url 'logout' %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100 w-lg-auto ms-lg-2">Logout</button>
-                                    </form>
-                                </li>
-                                {% else %}
-                                <li class="nav-item mt-2 mt-lg-0">
-                                    <a href="{% url 'login' %}" class="nav-link w-100 {% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                                    {% endif %}
+
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end shadow"
+                                    aria-labelledby="notificationDropdown" style="width: 350px;">
+
+                                    <li>
+                                        <h6 class="dropdown-header">
+                                            Notifications
+                                        </h6>
+                                    </li>
+
+                                    {% for notification in recent_notifications %}
+
+                                    <li>
+
+                                        <a href="{{ notification.link|default:'#' }}"
+                                            class="dropdown-item {% if not notification.is_read %}fw-bold{% endif %}">
+
+                                            {% if notification.notification_type == "follow" %}
+                                            👤
+                                            {% elif notification.notification_type == "like" %}
+                                            ❤️
+                                            {% elif notification.notification_type == "comment" %}
+                                            💬
+                                            {% elif notification.notification_type == "message" %}
+                                            ✉️
+                                            {% endif %}
+
+                                            {{ notification.text }}
+
+                                        </a>
+
+                                    </li>
+
+                                    {% empty %}
+
+                                    <li>
+                                        <span class="dropdown-item-text">
+                                            No notifications
+                                        </span>
+                                    </li>
+
+                                    {% endfor %}
+
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item text-center" href="{% url 'profiles:notifications' %}">
+                                            View All Notifications
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <!-- 6/7) Username then Login/Logout -->
+                            {% if request.user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+
+                                    {{ request.user.name }}
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{% url 'profiles:profile_detail' username=request.user.username %}">
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'profiles:inbox' %}">
+                                            Inbox
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+
+                                    <li>
+                                        <form method="post" action="{% url 'logout' %}">
+                                            {% csrf_token %}
+                                            <button class="dropdown-item text-danger">
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            {% endif %}
+                        </ul>
                     </div>
-                </nav>
-            </header>
+                </div>
+            </nav>
+        <!-- Mobile dropdown overlay container - escapes scroll clipping (outside navbar-collapse) -->
+        <div class="dropdown-overlay d-lg-none" id="dropdownOverlay"></div>
+        </header>
 
 
-        </div>
+    </div>
+    {% if messages %}
+    <script>
 
-        <main class="container">
-            <button id="back-btn" onclick="history.back()"
-                title="Go back"
-                style="display:none; position:fixed; bottom:24px; left:20px; z-index:1050;
+        document.addEventListener("DOMContentLoaded", function () {
+
+            {% for message in messages %}
+
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: '{% if message.tags == "success" %}success{% elif message.tags == "error" %}error{% elif message.tags == "warning" %}warning{% else %}info{% endif %}',
+                title: '{{ message|escapejs }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            {% endfor %}
+
+        });
+
+    </script>
+    {% endif %}
+    <main class="container">
+        <button id="back-btn" onclick="history.back()" title="Go back" style="display:none; position:fixed; bottom:24px; left:20px; z-index:1050;
                        background:var(--card-bg-color); color:var(--text-color);
                        border:1px solid var(--footer-border-color);
                        border-radius:50px; padding:8px 16px; font-size:0.85rem;
                        box-shadow:0 4px 14px rgba(0,0,0,0.25);
                        cursor:pointer; transition:box-shadow 0.2s ease, transform 0.2s ease;">
-                <i class="bi bi-arrow-left me-1"></i>Back
-            </button>
-            <style>
-                @media (max-width: 767px) { #back-btn { display: none !important; } }
-            </style>
-            <script>
-                (function(){
-                    const isHome = window.location.pathname === '/' || window.location.pathname === '/home/';
-                    if (!isHome) document.getElementById('back-btn').style.display = 'inline-flex';
-                    document.getElementById('back-btn').addEventListener('mouseenter', function(){
-                        this.style.transform='translateY(-2px)';
-                        this.style.boxShadow='0 6px 20px rgba(0,0,0,0.35)';
-                    });
-                    document.getElementById('back-btn').addEventListener('mouseleave', function(){
-                        this.style.transform='';
-                        this.style.boxShadow='0 4px 14px rgba(0,0,0,0.25)';
-                    });
-                })();
-            </script>
-            {% block content %}{% endblock %}
-        </main>
-
-        {% block footer %}
-        <footer class="py-4 mt-auto border-top">
-            <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
-                <div>
-                    <a href="{% url 'home_view' %}" class="text-decoration-none fw-bold" style="color:var(--link-color); font-size:1.1rem;">Scribbly</a>
-                    <span class="ms-2" style="color:var(--footer-text-color); font-size:0.85rem;">© 2025 · Built by Sagar</span>
-                </div>
-                <ul class="nav list-unstyled d-flex gap-3 mb-0">
-                    <li><a href="{% url 'home_view' %}" class="text-decoration-none" style="color:var(--footer-text-color); font-size:0.85rem;">Home</a></li>
-                    <li><a href="{% url 'about_view' %}" class="text-decoration-none" style="color:var(--footer-text-color); font-size:0.85rem;">About</a></li>
-                    <li><a href="{% url 'blog_list' %}" class="text-decoration-none" style="color:var(--footer-text-color); font-size:0.85rem;">Blogs</a></li>
-                </ul>
-            </div>
-        </footer>
-        {% endblock %}
-
-        <!-- Theme toggle script -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const toggleCheckboxes = document.querySelectorAll('.theme-toggle-checkbox');
-                const body = document.body;
-                const savedTheme = localStorage.getItem('theme') || 'dark-theme';
-                body.classList.add(savedTheme);
-                
-                toggleCheckboxes.forEach(cb => {
-                    cb.checked = savedTheme === 'light-theme';
-                    cb.addEventListener('change', (e) => {
-                        const isLight = e.target.checked;
-                        toggleCheckboxes.forEach(box => box.checked = isLight);
-                        
-                        if (isLight) {
-                            body.classList.replace('dark-theme', 'light-theme');
-                            localStorage.setItem('theme', 'light-theme');
-                        } else {
-                            body.classList.replace('light-theme', 'dark-theme');
-                            localStorage.setItem('theme', 'dark-theme');
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <!-- Collapsible search reveal -->
+            <i class="bi bi-arrow-left me-1"></i>Back
+        </button>
+        <style>
+            @media (max-width: 767px) {
+                #back-btn {
+                    display: none !important;
+                }
+            }
+        </style>
         <script>
             (function () {
-                const toggleBtn = document.getElementById('nav-search-toggle');
-                const box = document.getElementById('nav-search-reveal');
-
-                function openBox() {
-                    box.classList.add('open');
-                    toggleBtn.setAttribute('aria-expanded', 'true');
-                    const input = box.querySelector('input');
-                    if (input) setTimeout(() => input.focus(), 150);
-                }
-                function closeBox() {
-                    box.classList.remove('open');
-                    toggleBtn.setAttribute('aria-expanded', 'false');
-                }
-                function toggle() {
-                    if (box.classList.contains('open')) closeBox(); else openBox();
-                }
-
-                toggleBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    toggle();
+                const isHome = window.location.pathname === '/' || window.location.pathname === '/home/';
+                if (!isHome) document.getElementById('back-btn').style.display = 'inline-flex';
+                document.getElementById('back-btn').addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.35)';
                 });
-
-                // Escape or outside click closes
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && box.classList.contains('open')) closeBox();
-                });
-                document.addEventListener('click', (e) => {
-                    if (!box.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
-                        if (box.classList.contains('open')) closeBox();
-                    }
+                document.getElementById('back-btn').addEventListener('mouseleave', function () {
+                    this.style.transform = '';
+                    this.style.boxShadow = '0 4px 14px rgba(0,0,0,0.25)';
                 });
             })();
         </script>
+        {% block content %}{% endblock %}
+    </main>
 
-        {% block scripts_extra %}{% endblock %}
-
-        {# ── Guest action guard ─────────────────────────────────────────── #}
-        {# Hidden modal — invisible until triggered by JS for guests only. #}
-        <div class="modal fade" id="guestLoginModal" tabindex="-1" aria-labelledby="guestLoginModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="background:var(--card-bg-color); color:var(--card-text-color);">
-              <div class="modal-header border-0">
-                <h5 class="modal-title" id="guestLoginModalLabel"><i class="bi bi-lock-fill me-2"></i>Login Required</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body py-2">
-                Please log in to continue.
-              </div>
-              <div class="modal-footer border-0">
-                <a href="{% url 'login' %}" class="btn btn-primary"><i class="bi bi-box-arrow-in-right me-1"></i>Log In</a>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              </div>
+    {% block footer %}
+    <footer class="py-4 mt-auto border-top">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <a href="{% url 'home_view' %}" class="text-decoration-none fw-bold"
+                    style="color:var(--link-color); font-size:1.1rem;">Scribbly</a>
+                <span class="ms-2" style="color:var(--footer-text-color); font-size:0.85rem;">© 2025 · Built by
+                    Sagar</span>
             </div>
-          </div>
+            <ul class="nav list-unstyled d-flex gap-3 mb-0">
+                <li><a href="{% url 'home_view' %}" class="text-decoration-none"
+                        style="color:var(--footer-text-color); font-size:0.85rem;">Home</a></li>
+                <li><a href="{% url 'about_view' %}" class="text-decoration-none"
+                        style="color:var(--footer-text-color); font-size:0.85rem;">About</a></li>
+                <li><a href="{% url 'blog_list' %}" class="text-decoration-none"
+                        style="color:var(--footer-text-color); font-size:0.85rem;">Blogs</a></li>
+            </ul>
         </div>
+    </footer>
+    {% endblock %}
 
-        <script>
+    <!-- Theme toggle script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleCheckboxes = document.querySelectorAll('.theme-toggle-checkbox');
+            const body = document.body;
+            const savedTheme = localStorage.getItem('theme') || 'dark-theme';
+            body.classList.add(savedTheme);
+
+            toggleCheckboxes.forEach(cb => {
+                cb.checked = savedTheme === 'light-theme';
+                cb.addEventListener('change', (e) => {
+                    const isLight = e.target.checked;
+                    toggleCheckboxes.forEach(box => box.checked = isLight);
+
+                    if (isLight) {
+                        body.classList.replace('dark-theme', 'light-theme');
+                        localStorage.setItem('theme', 'light-theme');
+                    } else {
+                        body.classList.replace('light-theme', 'dark-theme');
+                        localStorage.setItem('theme', 'dark-theme');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Collapsible search reveal -->
+    <script>
+        (function () {
+            const toggleBtn = document.getElementById('nav-search-toggle');
+            const box = document.getElementById('nav-search-reveal');
+
+            function openBox() {
+                box.classList.add('open');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                const input = box.querySelector('input');
+                if (input) setTimeout(() => input.focus(), 150);
+            }
+            function closeBox() {
+                box.classList.remove('open');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+            function toggle() {
+                if (box.classList.contains('open')) closeBox(); else openBox();
+            }
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggle();
+            });
+
+            // Escape or outside click closes
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && box.classList.contains('open')) closeBox();
+            });
+            document.addEventListener('click', (e) => {
+                if (!box.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+                    if (box.classList.contains('open')) closeBox();
+                }
+            });
+        })();
+    </script>
+
+    {% block scripts_extra %}{% endblock %}
+
+    {# ── Guest action guard ─────────────────────────────────────────── #}
+    {# Hidden modal — invisible until triggered by JS for guests only. #}
+    <div class="modal fade" id="guestLoginModal" tabindex="-1" aria-labelledby="guestLoginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background:var(--card-bg-color); color:var(--card-text-color);">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="guestLoginModalLabel"><i class="bi bi-lock-fill me-2"></i>Login Required
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-2">
+                    Please log in to continue.
+                </div>
+                <div class="modal-footer border-0">
+                    <a href="{% url 'login' %}" class="btn btn-primary"><i class="bi bi-box-arrow-in-right me-1"></i>Log
+                        In</a>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         // Unified guest-action guard.
         // Works for ALL pages: checks data-auth on <body>, intercepts both
         // [data-auth-required] attribute AND known restricted selectors.
         (function () {
-          'use strict';
-          var isAuth = document.body.dataset.auth === 'true';
-          if (isAuth) return; // no-op for logged-in users
+            'use strict';
+            var isAuth = document.body.dataset.auth === 'true';
+            if (isAuth) return; // no-op for logged-in users
 
-          var _modal = null;
-          function showModal(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            if (!_modal) {
-              var el = document.getElementById('guestLoginModal');
-              if (el && window.bootstrap) _modal = new bootstrap.Modal(el);
+            var _modal = null;
+            function showModal(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!_modal) {
+                    var el = document.getElementById('guestLoginModal');
+                    if (el && window.bootstrap) _modal = new bootstrap.Modal(el);
+                }
+                if (_modal) _modal.show();
             }
-            if (_modal) _modal.show();
-          }
 
-          // 1) Generic attribute hook — attach to any element with [data-auth-required]
-          document.addEventListener('click', function (e) {
-            if (e.target.closest('[data-auth-required]')) showModal(e);
-          }, true);
+            // 1) Generic attribute hook — attach to any element with [data-auth-required]
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('[data-auth-required]')) showModal(e);
+            }, true);
 
-          // 2) Known restricted selectors (applied after DOM ready)
-          document.addEventListener('DOMContentLoaded', function () {
-            var SELECTORS = [
-              '.like-button', '.dislike-button', '.reply-btn',
-              '[data-bs-target="#commentForm"]',
-            ];
-            SELECTORS.forEach(function (sel) {
-              document.querySelectorAll(sel).forEach(function (el) {
-                el.addEventListener('click', showModal, true);
-              });
+            // 2) Known restricted selectors (applied after DOM ready)
+            document.addEventListener('DOMContentLoaded', function () {
+                var SELECTORS = [
+                    '.like-button', '.dislike-button', '.reply-btn',
+                    '[data-bs-target="#commentForm"]',
+                ];
+                SELECTORS.forEach(function (sel) {
+                    document.querySelectorAll(sel).forEach(function (el) {
+                        el.addEventListener('click', showModal, true);
+                    });
+                });
+
+                // Intercept restricted form submissions
+                var FORM_SELECTORS = [
+                    'form[action*="add-comment"]',
+                    'form[action*="like"]',
+                    'form[action*="dislike"]',
+                    'form[action*="share-post"]',
+                ];
+                FORM_SELECTORS.forEach(function (sel) {
+                    document.querySelectorAll(sel).forEach(function (form) {
+                        form.addEventListener('submit', showModal, true);
+                    });
+                });
             });
-
-            // Intercept restricted form submissions
-            var FORM_SELECTORS = [
-              'form[action*="add-comment"]',
-              'form[action*="like"]',
-              'form[action*="dislike"]',
-              'form[action*="share-post"]',
-            ];
-            FORM_SELECTORS.forEach(function (sel) {
-              document.querySelectorAll(sel).forEach(function (form) {
-                form.addEventListener('submit', showModal, true);
-              });
-            });
-          });
         })();
-        </script>
-    </body>
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    </html>
+    <!-- Mobile Dropdown Fix: Use overlay container to escape scroll clipping -->
+    <script>
+    (function () {
+        'use strict';
+        
+        function isMobile() {
+            return window.innerWidth <= 991.98;
+        }
+        
+        function getOverlay() {
+            return document.getElementById('dropdownOverlay');
+        }
+        
+        function moveDropdownToOverlay(dropdownMenu) {
+            if (!dropdownMenu.dataset.originalParent) {
+                dropdownMenu.dataset.originalParent = dropdownMenu.parentElement;
+                dropdownMenu.dataset.originalNextSibling = dropdownMenu.nextElementSibling;
+            }
+            const overlay = getOverlay();
+            if (overlay) {
+                overlay.appendChild(dropdownMenu);
+            }
+        }
+        
+        function restoreDropdown(dropdownMenu) {
+            const originalParent = dropdownMenu.dataset.originalParent;
+            const originalNextSibling = dropdownMenu.dataset.originalNextSibling;
+            if (originalParent) {
+                if (originalNextSibling) {
+                    originalParent.insertBefore(dropdownMenu, originalNextSibling);
+                } else {
+                    originalParent.appendChild(dropdownMenu);
+                }
+                delete dropdownMenu.dataset.originalParent;
+                delete dropdownMenu.dataset.originalNextSibling;
+            }
+        }
+        
+        function positionDropdown(dropdownMenu, trigger) {
+            const rect = trigger.getBoundingClientRect();
+            
+            dropdownMenu.style.position = 'fixed';
+            dropdownMenu.style.top = rect.bottom + 'px';
+            dropdownMenu.style.left = rect.left + 'px';
+            dropdownMenu.style.right = 'auto';
+            dropdownMenu.style.width = rect.width + 'px';
+            dropdownMenu.style.maxWidth = 'calc(100vw - 2rem)';
+            dropdownMenu.style.maxHeight = 'calc(100vh - ' + (rect.bottom + 10) + 'px)';
+            dropdownMenu.style.zIndex = '1050';
+            dropdownMenu.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)';
+            dropdownMenu.style.border = '1px solid var(--footer-border-color)';
+            dropdownMenu.style.borderRadius = '0 0 12px 12px';
+            dropdownMenu.style.background = 'var(--card-bg-color)';
+            dropdownMenu.style.overflowY = 'auto';
+            dropdownMenu.style.overflowX = 'hidden';
+        }
+        
+        function disablePopper(dropdownMenu) {
+            // Disable Popper for this dropdown on mobile
+            const toggle = dropdownMenu.previousElementSibling;
+            if (toggle && toggle.hasAttribute('data-bs-toggle')) {
+                const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+                if (dropdown && dropdown._popper) {
+                    dropdown._popper.destroy();
+                    dropdown._popper = null;
+                }
+                // Disable popper for future
+                toggle.setAttribute('data-bs-popper', 'false');
+            }
+        }
+        
+        function handleDropdownShow(event) {
+            if (!isMobile()) return;
+            
+            // Bootstrap 5 fires show.bs.dropdown on the .dropdown-menu, with relatedTarget as the toggle
+            const dropdownToggle = event.relatedTarget;
+            const dropdownMenu = event.target;
+            
+            if (!dropdownMenu || !dropdownMenu.classList.contains('dropdown-menu')) return;
+            
+            // Ensure menu has an ID for targeting
+            if (!dropdownMenu.id) {
+                dropdownMenu.id = 'dropdown-menu-' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            // Disable Popper for this dropdown on mobile
+            disablePopper(dropdownMenu);
+            
+            moveDropdownToOverlay(dropdownMenu);
+            positionDropdown(dropdownMenu, dropdownToggle);
+        }
+        
+        function handleDropdownHide(event) {
+            if (!isMobile()) return;
+            
+            // Bootstrap 5 fires hide.bs.dropdown on the .dropdown-menu, with relatedTarget as the toggle
+            const dropdownToggle = event.relatedTarget;
+            const dropdownMenu = event.target;
+            
+            if (!dropdownMenu || !dropdownMenu.classList.contains('dropdown-menu')) return;
+            
+            restoreDropdown(dropdownMenu);
+            
+            // Reset inline styles
+            dropdownMenu.style.position = '';
+            dropdownMenu.style.top = '';
+            dropdownMenu.style.left = '';
+            dropdownMenu.style.right = '';
+            dropdownMenu.style.width = '';
+            dropdownMenu.style.maxWidth = '';
+            dropdownMenu.style.maxHeight = '';
+            dropdownMenu.style.zIndex = '';
+            dropdownMenu.style.boxShadow = '';
+            dropdownMenu.style.border = '';
+            dropdownMenu.style.borderRadius = '';
+            dropdownMenu.style.background = '';
+            dropdownMenu.style.overflowY = '';
+            dropdownMenu.style.overflowX = '';
+        }
+        
+        function init() {
+            const dropdownMenus = document.querySelectorAll('.navbar-nav .dropdown-menu');
+            const navbarCollapse = document.getElementById('mainNavbar');
+            
+            dropdownMenus.forEach(function(menu) {
+                // Ensure menu has an ID for targeting
+                if (!menu.id) {
+                    menu.id = 'dropdown-menu-' + Math.random().toString(36).substr(2, 9);
+                }
+                
+                // Bootstrap events fire on the .dropdown-menu
+                menu.addEventListener('show.bs.dropdown', handleDropdownShow);
+                menu.addEventListener('hide.bs.dropdown', handleDropdownHide);
+            });
+            
+            // Reposition on scroll/resize when dropdown is open
+            function repositionOpenDropdown() {
+                if (!isMobile()) return;
+                const openMenu = document.querySelector('.dropdown-menu.show');
+                if (openMenu) {
+                    const toggle = document.querySelector('[aria-controls="' + openMenu.id + '"]')
+                        || document.querySelector('[data-bs-target="#' + openMenu.id + '"]')
+                        || document.querySelector('[data-bs-toggle="dropdown"] + #' + openMenu.id);
+                    if (toggle) positionDropdown(openMenu, toggle);
+                }
+            }
+            
+            window.addEventListener('scroll', repositionOpenDropdown, { passive: true });
+            
+            // Also listen to scroll on the navbar-collapse (the actual scrollable container)
+            if (navbarCollapse) {
+                navbarCollapse.addEventListener('scroll', repositionOpenDropdown, { passive: true });
+            }
+            
+            window.addEventListener('resize', function() {
+                if (!isMobile()) {
+                    // Restore all dropdowns when switching to desktop
+                    document.querySelectorAll('.navbar-nav .dropdown-menu').forEach(restoreDropdown);
+                }
+            });
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

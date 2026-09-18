@@ -17,7 +17,8 @@ class BlogCreateForm(forms.ModelForm):
 
         # If the author IS an author, keep the status field; else remove it
         if self.author and not self.author.is_author:
-            self.fields.pop('status', None)  # remove status for viewers
+            self.fields['status'].widget = forms.HiddenInput()
+            self.fields['status'].initial = 2
 
     def clean(self):
         cleaned_data = super().clean()
@@ -74,8 +75,8 @@ class CustomSignupForm(forms.ModelForm):
         fields = ['name', 'username', 'email', 'password']  # role removed — all new users are Viewers
 
     def clean_username(self):
-        username = self.cleaned_data.get('username', '').lower()  # enforce lowercase
-        if not re.match(r'^[a-z0-9_]+$', username):
+        username = self.cleaned_data.get('username', '')
+        if not re.match(r'^[A-Za-z0-9_]+$', username):
             raise ValidationError("Username can only contain letters, numbers, and underscores.")
         if User.objects.filter(username__iexact=username).exists():
             raise ValidationError("Username is already taken.")

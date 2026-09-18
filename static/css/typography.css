@@ -1,0 +1,209 @@
+/* Hero */
+.hero-section {
+    border: 2px solid var(--btn-bg-color);
+    border-radius: 12px;
+    padding: 3rem 1rem;
+    margin-bottom: 1.5rem;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--hero-bg);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+.hero-section h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+.hero-section .lead {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+.hero-section .btn {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--card-text-color);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
+h4 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+h5 { font-size: clamp(1rem, 2vw, 1.25rem); }
+h6 { font-size: clamp(0.9rem, 1.5vw, 1rem); }
+
+/* Card headings */
+.card-title { color: var(--card-text-color); }
+.card-title:hover { color: var(--link-hover-color); }
+
+/* Profile page typography */
+.profile-card h5.card-title {
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 1rem;
+    color: var(--btn-bg-color);
+}
+
+.stat-value {
+    font-size: 1.65rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--btn-bg-color);
+}
+.stat-label {
+    font-size: var(--font-size-small);
+    color: var(--text-muted-color);
+}
+
+/* Post titles */
+.post-title {
+    color: var(--card-text-color);
+}
+.post-title:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Comment author */
+.comment-author {
+    font-weight: 700;
+}
+.comment-date {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Messenger typography */
+.convo-name {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 15px;
+    letter-spacing: -0.1px;
+}
+
+.convo-preview {
+    color: var(--text-muted-color);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+}
+
+.chat-header .user-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.chat-header .user-info .status {
+    font-size: 12px;
+    color: var(--text-muted-color);
+    margin-top: 2px;
+}
+
+.message-bubble {
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+.message-meta {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.messenger-empty h4 {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.messenger-empty p {
+    color: var(--text-muted-color);
+    font-size: 15px;
+}
+
+/* Edit profile form typography */
+.container.edit-profile-container h2 {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-large);
+    border-bottom: 2px solid var(--ep-primary);
+    padding-bottom: 0.3rem;
+    color: var(--ep-text-primary);
+}
+
+.container.edit-profile-container h4 {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-medium);
+    margin: var(--spacing-large) 0 var(--spacing-medium);
+    color: var(--ep-text-primary);
+}
+
+.container.edit-profile-container label.form-label {
+    display: block;
+    margin-bottom: var(--spacing-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--ep-text-secondary);
+    font-size: 0.95rem;
+}
+
+.container.edit-profile-container .form-text {
+    font-size: var(--font-size-small);
+    color: var(--ep-text-secondary);
+    margin-top: 0.15rem;
+}
+
+.container.edit-profile-container .text-danger {
+    margin-top: 0.25rem;
+    font-size: var(--font-size-small);
+    color: var(--ep-error);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Badge styles */
+.badge.role-badge {
+    background-color: var(--btn-bg-color);
+    color: var(--btn-text-color, var(--card-text-color));
+    padding: 0.35em 0.6em;
+    border-radius: 6px;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+.topic-pill {
+    background: var(--btn-bg-color);
+    color: var(--btn-text-color, var(--card-text-color));
+    padding: 0.3em 0.6em;
+    border-radius: 9999px;
+    font-size: var(--font-size-small);
+}
+
+/* Calm solid headline treatment (replaces gradient-text look) */
+.text-gradient {
+    color: var(--text-color);
+}
+
+/* Card header */
+.card-header h4,
+.card-header .mb-0 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--card-text-color);
+    margin: 0;
+    line-height: 1.4;
+}

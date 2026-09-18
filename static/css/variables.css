@@ -1,0 +1,120 @@
+:root {
+  /* Scribbly semantic color tokens — Dark Mode (single source of truth) */
+  --color-background: #0F111A;
+  --color-surface: #161925;
+  --color-text-primary: #F5F5F4;
+  --color-text-muted: #94A3B8;
+  --color-accent: #818CF8;
+  --color-accent-strong: #A5B4FC;
+  --color-border: #2A2D3D;
+
+  /* Legacy component variables, mapped onto the semantic tokens */
+  --bg-color: var(--color-background);
+  --text-color: var(--color-text-primary);
+  --card-bg-color: var(--color-surface);
+  --card-text-color: var(--color-text-primary);
+  --btn-bg-color: var(--color-accent);
+  --btn-bg-color-rgb: 129, 140, 248;
+  --btn-text-color: #0F111A;
+  --btn-hover-bg-color: var(--color-accent-strong);
+  --link-color: var(--color-accent);
+  --link-hover-color: var(--color-accent-strong);
+  --footer-bg-color: var(--color-surface);
+  --footer-text-color: var(--color-text-muted);
+  --footer-border-color: var(--color-border);
+  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(129, 140, 248, 0.14), rgba(15, 17, 26, 0));
+
+  /* Theme-compatible muted text color */
+  --text-muted-color: var(--color-text-muted);
+  --text-muted-color-light: #94A3B8;
+
+  /* Fonts and spacing */
+  --border-radius: 12px;
+  --font-family-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-size-large: 2rem;
+  --font-size-medium: 1.25rem;
+  --font-size-small: 0.85rem;
+  --spacing-md: 1.5rem;
+  --spacing-sm: 0.85rem;
+
+  /* Edit profile form variables (fixed light card, same in both themes) */
+  --ep-text-primary: #1C1917;
+  --ep-text-secondary: #57534E;
+  --ep-bg-container: #FFFFFF;
+  --ep-bg-input: #FAF9F6;
+  --ep-border-input: #E7E5E4;
+  --ep-border-focus: #D97706;
+  --ep-shadow-light: rgba(28, 25, 23, 0.1);
+  --ep-shadow-deep: rgba(217, 119, 6, 0.25);
+  --ep-primary: #D97706;
+  --ep-primary-dark: #B45309;
+  --ep-primary-hover: #92400E;
+  --ep-error: #dc2626;
+  --ep-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --btn-border-radius: 9999px;
+  --spacing-large: 1.5rem;
+  --spacing-medium: 1rem;
+  --spacing-small: 0.6rem;
+  --font-size-base: 1rem;
+}
+
+/* Scribbly semantic color tokens — Light Mode */
+body.light-theme {
+  --color-background: #FAF9F6;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1C1917;
+  --color-text-muted: #57534E;
+  --color-accent: #D97706;
+  --color-accent-strong: #B45309;
+  --color-border: #E7E5E4;
+
+  --bg-color: var(--color-background);
+  --text-color: var(--color-text-primary);
+  --card-bg-color: var(--color-surface);
+  --card-text-color: var(--color-text-primary);
+  --btn-bg-color: var(--color-accent);
+  --btn-bg-color-rgb: 217, 119, 6;
+  --btn-text-color: #1C1917;
+  --btn-hover-bg-color: var(--color-accent-strong);
+  --link-color: var(--color-accent);
+  --link-hover-color: var(--color-accent-strong);
+  --footer-bg-color: var(--color-surface);
+  --footer-text-color: var(--color-text-muted);
+  --footer-border-color: var(--color-border);
+  --card-box-shadow: 0 4px 12px rgba(28, 25, 23, 0.08);
+  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217, 119, 6, 0.1), rgba(250, 249, 246, 0));
+  --input-bg: #FFFFFF;
+  --input-text: #1C1917;
+  --input-border: #E7E5E4;
+  --text-muted-color: var(--color-text-muted);
+}
+
+/* Alternate light theme (used in profile pages) */
+body.light-theme-alt {
+  --color-background: #FAF9F6;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1C1917;
+  --color-text-muted: #57534E;
+  --color-accent: #D97706;
+  --color-accent-strong: #B45309;
+  --color-border: #E7E5E4;
+
+  --bg-color: var(--color-background);
+  --text-color: var(--color-text-primary);
+  --card-bg-color: var(--color-surface);
+  --card-text-color: var(--color-text-primary);
+  --btn-bg-color: var(--color-accent);
+  --btn-bg-color-rgb: 217, 119, 6;
+  --btn-text-color: #1C1917;
+  --btn-hover-bg-color: var(--color-accent-strong);
+  --link-color: var(--color-accent);
+  --link-hover-color: var(--color-accent-strong);
+  --footer-bg-color: var(--color-surface);
+  --footer-text-color: var(--color-text-muted);
+  --footer-border-color: var(--color-border);
+  --card-box-shadow: 0 4px 12px rgba(28, 25, 23, 0.08);
+  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217, 119, 6, 0.1), rgba(250, 249, 246, 0));
+  --text-muted-color: var(--color-text-muted);
+}

@@ -1,8 +1,11 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from django.urls import reverse
 from django.utils import timezone
-from .models import Conversation, Message
+from .models import Conversation, Message, Notification
+from django.contrib.auth import get_user_model
+from .utils import create_notification
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -20,13 +23,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not is_participant:
             await self.close()
             return
+        await self.channel_layer.group_add(
+        self.room_group_name,
+        self.channel_name
+        )
+        await self.update_last_seen(self.user.id)
+        await self.accept()
+
+    @database_sync_to_async
+    def update_last_seen(self, user_id):
+            User = get_user_model()
+
+            try:
+                user = User.objects.select_related("profile").get(id=user_id)
+                user.profile.last_seen = timezone.now()
+                user.profile.save(update_fields=["last_seen"])
+
+            except Exception as e:
+                print(f"Presence Update Error: {e}")
 
         # Bind websocket connection to a generalized room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-        await self.accept()
+    
 
     async def disconnect(self, close_code):
         # Leave room group asynchronously 
@@ -42,6 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         if not message_text:
             return
+        await self.update_last_seen(self.user.id)
 
         # Process standard database insertion through asynchronous adapters
         msg = await self.save_message(self.user.id, self.conversation_id, message_text)
@@ -88,7 +106,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
             # Ensure auto_now_add fields are populated in memory
             msg.refresh_from_db()
-            
+            sender = msg.sender
+
+            recipient = (
+                convo.user2
+                if sender == convo.user1
+                else convo.user1
+)
+
+            existing_notification = Notification.objects.filter(recipient=recipient, actor=sender, notification_type="message", is_read=False
+                ).exists()
+            if not existing_notification:
+
+                create_notification(
+        recipient=recipient,
+        actor=sender,
+        notification_type="message",
+        text=f"{sender.username} sent you a message.",
+        link=reverse(
+            "profiles:message_user",
+            kwargs={
+                "target_username": sender.username
+            }
+        )
+    )
+
             # Cascade updated_at timestamps to push chats to the top of inbox lists
             convo.save(update_fields=['updated_at'])
             
@@ -106,3 +148,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
             import traceback
             traceback.print_exc()
             return None
+

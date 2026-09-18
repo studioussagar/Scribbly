@@ -1,0 +1,118 @@
+/* Mobile-First Base Styles */
+html {
+    font-size: 16px; /* Prevent iOS zoom on input focus */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    font-size: clamp(14px, 4vw, 16px);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family-sans);
+}
+
+/* Container Responsiveness */
+.container, .container-fluid {
+    padding-left: clamp(12px, 4vw, 24px);
+    padding-right: clamp(12px, 4vw, 24px);
+}
+
+/* Base link styles */
+a {
+    text-decoration: none;
+    color: var(--link-color);
+    transition: color 0.2s ease;
+}
+a:hover {
+    color: var(--link-hover-color);
+}
+
+/* Form inputs inherit theme — apply to all form controls globally */
+input, textarea, select {
+    background-color: var(--input-bg, var(--card-bg-color)) !important;
+    color: var(--input-text, var(--card-text-color)) !important;
+    border-color: var(--input-border, var(--btn-bg-color)) !important;
+}
+input::placeholder, textarea::placeholder {
+    color: var(--input-text, var(--card-text-color)) !important;
+    opacity: 0.55;
+}
+
+/* Focus state */
+input:focus, textarea:focus, select:focus {
+    border-color: var(--btn-bg-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--btn-bg-color-rgb), 0.22) !important;
+    outline: none;
+}
+
+/* Visible keyboard focus for everything else (inputs keep the ring above) */
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline: 2px solid var(--btn-bg-color);
+    outline-offset: 2px;
+}
+
+/* Ensure file inputs also pick up theme */
+input[type="file"] {
+    background-color: var(--input-bg, var(--card-bg-color)) !important;
+    color: var(--input-text, var(--card-text-color)) !important;
+}
+
+/* Neutralize Bootstrap overrides */
+.form-control:focus,
+input[type="text"]:focus {
+    background-color: var(--card-bg-color) !important;
+    color: var(--card-text-color) !important;
+}
+
+/* Bootstrap collapse timing */
+.collapse { transition: height 0.3s ease; }
+
+/* Post Content Typography & Images */
+.post-content {
+    font-size: clamp(14px, 1.1vw, 16px);
+    line-height: 1.6;
+}
+.post-content img {
+    display: block !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 20px auto !important;
+    float: none !important;
+}
+.post-content figure, .post-content picture {
+    display: block !important;
+    float: none !important;
+    margin: 20px auto !important;
+}
+.post-content p {
+    clear: both !important;
+}
+@media (max-width: 480px) {
+    .post-content {
+        font-size: 14px;
+    }
+}
+
+/* Override Bootstrap .text-muted */
+.text-muted,
+.activity-row small,
+.post-row small,
+.stat-label,
+.card .text-muted {
+    color: var(--text-muted-color) !important;
+    opacity: 1 !important;
+}
+
+/* Respect users who prefer reduced motion: collapse all CSS motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

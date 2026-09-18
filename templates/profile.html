@@ -16,21 +16,24 @@
 
       <!-- Avatar -->
       <div class="avatar-wrap position-relative">
-        <img src="{{ profile_user.profile.avatar_url|default:'' }}" alt="{{ profile_user.name }}" class="avatar-lg rounded-circle" />
-{% if not profile_user.profile.avatar_url %}
-  <img src="{% static 'img/avatar-default.png' %}" alt="{{ profile_user.name }}" class="avatar-lg rounded-circle" />
-{% endif %}
+        <img src="{{ profile_user.profile.avatar_url|default:'' }}" alt="{{ profile_user.name }}"
+          class="avatar-lg rounded-circle" />
+        {% if not profile_user.profile.avatar_url %}
+        <img src="{% static 'img/avatar-default.png' %}" alt="{{ profile_user.name }}"
+          class="avatar-lg rounded-circle" />
+        {% endif %}
 
         {% if request.user == profile_user %}
-          <!-- Optional edit chip on avatar for owner -->
-          <label class="position-absolute bottom-0 end-0 btn btn-sm btn-outline-primary rounded-pill px-2 py-1"
-                 for="avatarUpload" style="transform: translate(20%, 20%);">
-            Change
-          </label>
-          <form id="avatarUploadForm" class="d-none" method="post" action="{% url 'profiles:upload_avatar' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" id="avatarUpload" name="avatar" accept="image/*">
-          </form>
+        <!-- Optional edit chip on avatar for owner -->
+        <label class="position-absolute bottom-0 end-0 btn btn-sm btn-outline-primary rounded-pill px-2 py-1"
+          for="avatarUpload" style="transform: translate(20%, 20%);">
+          Change
+        </label>
+        <form id="avatarUploadForm" class="d-none" method="post" action="{% url 'profiles:upload_avatar' %}"
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" id="avatarUpload" name="avatar" accept="image/*">
+        </form>
         {% endif %}
       </div>
 
@@ -40,42 +43,84 @@
         <h1 class="h3 mb-1 d-flex align-items-center gap-2">
           {{ profile_user.name }}
           {% if profile_user.is_staff %}
-            <span class="badge role-badge">Admin</span>
+          <span class="badge role-badge">Admin</span>
           {% else %}
-            <span class="badge role-badge">Author</span>
+          <span class="badge role-badge">Author</span>
           {% endif %}
         </h1>
         <p class="text-muted mb-1">@{{ profile_user.username }}</p>
-        <p class="text-muted small mb-0">Joined {{ profile_user.date_joined|date:"M d, Y" }}</p>
+
+        <div class="d-flex gap-3 mb-2">
+          <a href="{% url 'profiles:followers' profile_user.username %}" class="text-decoration-none">
+            <strong>{{ followers_count }}</strong> Followers
+          </a>
+
+          <a href="{% url 'profiles:following' profile_user.username %}" class="text-decoration-none">
+            <strong>{{ following_count }}</strong> Following
+          </a>
+        </div>
+
+        <p class="text-muted small mb-0">
+          Joined {{ profile_user.date_joined|date:"M d, Y" }}
+        </p>
       </div>
 
 
       <!-- Actions -->
       <div class="d-flex align-items-center gap-2 ms-auto">
         {% if request.user == profile_user %}
-          <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
-          <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square me-1"></i>Write Post</a>
-          <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-person-gear me-1"></i>Edit Profile</a>
-          <a href="{% url 'password_change' %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-key me-1"></i>Change Password</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm"><i
+            class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+        <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square me-1"></i>Write
+          Post</a>
+        <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary btn-sm"><i
+            class="bi bi-person-gear me-1"></i>Edit Profile</a>
+        <a href="{% url 'password_change' %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-key me-1"></i>Change
+          Password</a>
 
-          <!-- Default avatars chooser (modal trigger) -->
-          <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#defaultAvatarModal">
-            Choose Avatar
-          </button>
+        <!-- Default avatars chooser (modal trigger) -->
+        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#defaultAvatarModal">
+          Choose Avatar
+        </button>
         {% else %}
-          <!-- Viewer looking at someone else -->
-          <form method="post" action="{% url 'profiles:toggle_follow' username=profile_user.username %}" class="d-inline">
-            {% csrf_token %}
-            <button class="btn btn-primary btn-sm">
-              {% if profile_user in request.user.profile.following.all %}Following{% else %}Follow{% endif %}
-            </button>
-          </form>
-          <a href="{% url 'profiles:message_user' target_username=profile_user.username %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-chat-dots me-1"></i>Message</a>
+        <!-- Viewer looking at someone else -->
+        <form method="post" id="followForm" action="{% url 'profiles:toggle_follow' username=profile_user.username %}"
+          class="d-inline">
+          {% csrf_token %}
+          <button class="btn btn-primary btn-sm" id="followBtn">
+            {% if is_following %}
+            Unfollow
+            {% else %}
+            Follow
+            {% endif %}</button>
+        </form>
+        <a href="{% url 'profiles:message_user' target_username=profile_user.username %}"
+          class="btn btn-outline-secondary btn-sm"><i class="bi bi-chat-dots me-1"></i>Message</a>
         {% endif %}
       </div>
     </div>
   </section>
+  <ul class="nav nav-pills justify-content-center mb-4">
 
+    <li class="nav-item">
+      <a class="nav-link active" href="#">
+        Posts
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'profiles:followers' profile_user.username %}">
+        Followers
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'profiles:following' profile_user.username %}">
+        Following
+      </a>
+    </li>
+
+  </ul>
 
   <div class="row g-4">
     <!-- Left column -->
@@ -115,9 +160,9 @@
           <h5 class="card-title mb-3">Topics</h5>
           <div class="d-flex flex-wrap gap-2">
             {% for tag in profile_user.profile.topics.all %}
-              <span class="badge topic-pill">{{ tag.name }}</span>
+            <span class="badge topic-pill">{{ tag.name }}</span>
             {% empty %}
-              <span class="text-muted">No topics yet.</span>
+            <span class="text-muted">No topics yet.</span>
             {% endfor %}
           </div>
         </div>
@@ -131,22 +176,38 @@
 
       <!-- Stats -->
       <div class="card shadow-sm profile-card mb-4">
-        <div class="card-body d-flex flex-wrap gap-3">
-          <div class="stat">
-            <div class="stat-value">{{ profile_user.posts.count }}</div>
-            <div class="stat-label">Posts</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">{{ aggregate.aggregate_likes|default:0 }}</div>
-            <div class="stat-label">Total Likes</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">{{ aggregate.aggregate_dislikes|default:0 }}</div>
-            <div class="stat-label">Dislikes</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">{{ profile_user.comments.count }}</div>
-            <div class="stat-label">Comments</div>
+        <div class="card shadow-sm profile-card mb-4">
+          <div class="card-body d-flex flex-wrap gap-4 justify-content-around">
+
+            <div class="stat text-center">
+              <div class="stat-value">{{ profile_user.posts.count }}</div>
+              <div class="stat-label">Posts</div>
+            </div>
+
+            <a href="{% url 'profiles:followers' profile_user.username %}" class="text-decoration-none text-reset">
+              <div class="stat text-center">
+                <div class="stat-value">{{ followers_count }}</div>
+                <div class="stat-label">Followers</div>
+              </div>
+            </a>
+
+            <a href="{% url 'profiles:following' profile_user.username %}" class="text-decoration-none text-reset">
+              <div class="stat text-center">
+                <div class="stat-value">{{ following_count }}</div>
+                <div class="stat-label">Following</div>
+              </div>
+            </a>
+
+            <div class="stat text-center">
+              <div class="stat-value">{{ aggregate.aggregate_likes|default:0 }}</div>
+              <div class="stat-label">Likes</div>
+            </div>
+
+            <div class="stat text-center">
+              <div class="stat-value">{{ profile_user.comments.count }}</div>
+              <div class="stat-label">Comments</div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -158,14 +219,14 @@
           <h5 class="card-title mb-3">Recent Activity</h5>
           <ul class="list-unstyled mb-0">
             {% for a in recent_activity %}
-              {% if request.user == profile_user or not a.private %}
-                <li class="activity-row d-flex justify-content-between py-2">
-                  <span>{{ a.text|safe }}</span>
-                  <small class="text-muted">{{ a.when|date:"M d, Y" }}</small>
-                </li>
-              {% endif %}
+            {% if request.user == profile_user or not a.private %}
+            <li class="activity-row d-flex justify-content-between py-2">
+              <span>{{ a.text|safe }}</span>
+              <small class="text-muted">{{ a.when|date:"M d, Y" }}</small>
+            </li>
+            {% endif %}
             {% empty %}
-              <li class="text-muted">No recent activity.</li>
+            <li class="text-muted">No recent activity.</li>
             {% endfor %}
           </ul>
         </div>
@@ -174,21 +235,21 @@
 
       <!-- Latest posts -->
       <div class="card shadow-sm profile-card">
-    <div class="card-body">
-      <h5 class="card-title mb-3">Latest Posts</h5>
-      {% for p in posts %}
-        <div class="post-row d-flex align-items-center justify-content-between py-2">
-          <a class="post-title text-decoration-none" href="{% url 'blog_view' p.slug %}">{{ p.title }}</a>
-          <div class="d-flex align-items-center gap-3">
-            <small class="text-muted">{{ p.date_created|date:"M d, Y" }}</small>
-            <span class="badge rounded-pill stat-chip">👍 {{ p.likes.count }}</span>
+        <div class="card-body">
+          <h5 class="card-title mb-3">Latest Posts</h5>
+          {% for p in posts %}
+          <div class="post-row d-flex align-items-center justify-content-between py-2">
+            <a class="post-title text-decoration-none" href="{% url 'blog_view' p.slug %}">{{ p.title }}</a>
+            <div class="d-flex align-items-center gap-3">
+              <small class="text-muted">{{ p.date_created|date:"M d, Y" }}</small>
+              <span class="badge rounded-pill stat-chip">👍 {{ p.likes.count }}</span>
+            </div>
           </div>
+          {% empty %}
+          <p class="text-muted mb-0">No posts yet.</p>
+          {% endfor %}
         </div>
-      {% empty %}
-        <p class="text-muted mb-0">No posts yet.</p>
-      {% endfor %}
-    </div>
-</div>
+      </div>
 
 
 
@@ -198,12 +259,12 @@
         <div class="card-body">
           <h5 class="card-title mb-3">Drafts</h5>
           {% for d in filtered_posts %}
-            <div class="d-flex justify-content-between py-2">
-              <a href="{% url 'edit_post' slug=d.slug %}">{{ d.title }}</a>
-              <small class="text-muted">Updated {{ d.date_updated|date:"M d, Y" }}</small>
-            </div>
+          <div class="d-flex justify-content-between py-2">
+            <a href="{% url 'edit_post' slug=d.slug %}">{{ d.title }}</a>
+            <small class="text-muted">Updated {{ d.date_updated|date:"M d, Y" }}</small>
+          </div>
           {% empty %}
-            <p class="text-muted mb-0">No drafts.</p>
+          <p class="text-muted mb-0">No drafts.</p>
           {% endfor %}
         </div>
       </div>
@@ -227,11 +288,11 @@
       <div class="modal-body">
         <div class="d-flex flex-wrap gap-3">
           {% for i in "12345678" %}
-            <button type="button" class="avatar-option btn p-0 border-0"
-                    data-src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}">
-              <img src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}"
-                   class="rounded-circle" style="width:72px;height:72px;object-fit:cover;">
-            </button>
+          <button type="button" class="avatar-option btn p-0 border-0"
+            data-src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}">
+            <img src="{% static 'img/avatars/defaults/'|add:i|add:'.png' %}" class="rounded-circle"
+              style="width:72px;height:72px;object-fit:cover;">
+          </button>
           {% endfor %}
         </div>
       </div>
@@ -246,7 +307,6 @@
 
 
 {% block scripts_extra %}
-{% if request.user == profile_user %}
 <script>
   // Upload avatar via hidden input
   const up = document.getElementById('avatarUpload');
@@ -262,11 +322,56 @@
     const src = btn.dataset.src;
     const resp = await fetch("{% url 'profiles:set_default_avatar' %}", {
       method: 'POST',
-      headers: {'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/)||[])[1]},
+      headers: { 'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] },
       body: new URLSearchParams({ src })
     });
     if (resp.ok) location.reload(); else alert('Failed to set avatar.');
   });
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const form = document.getElementById('followForm');
+    const btn = document.getElementById('followBtn');
+
+    if (!form || !btn) return;
+
+    form.addEventListener('submit', async function (e) {
+
+      e.preventDefault();
+
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector(
+            '[name=csrfmiddlewaretoken]'
+          ).value,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (!response.ok) {
+        alert('Something went wrong.');
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.ok) {
+
+        if (data.state === 'followed') {
+          btn.textContent = 'Following';
+        }
+
+        if (data.state === 'unfollowed') {
+          btn.textContent = 'Follow';
+        }
+
+      } else {
+        alert('Something went wrong.');
+      }
+
+    });
+
+  });
 </script>
-{% endif %}
 {% endblock %}

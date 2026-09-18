@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Pending Applications{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            Pending Applications
+        </h2>
+
+        <p class="text-muted mb-0">
+            Applications waiting for review.
+        </p>
+    </div>
+
+    <a href="{% url 'review_center:dashboard' %}"
+       class="btn btn-outline-secondary">
+        Dashboard
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body p-0">
+
+        {% if applications %}
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Applicant</th>
+                        <th>Blog Title</th>
+                        <th>Submitted</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for application in applications %}
+
+                <tr>
+
+                    <td>
+                        {{ application.user.username }}
+                    </td>
+
+                    <td>
+                        {{ application.preview_blog.title }}
+                    </td>
+
+                    <td>
+                        {{ application.submitted_at|date:"M d, Y H:i" }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    </td>
+
+                    <td class="text-end">
+
+                        <a href="{% url 'review_center:application-detail' application.pk %}"
+                           class="btn btn-sm btn-primary">
+                            Review
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+
+            <h5>No pending applications</h5>
+
+            <p class="text-muted mb-0">
+                All applications have been reviewed.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

@@ -235,24 +235,25 @@ footer a:hover i.bi { color: #4fdf27; }
 }
 span .fw-semibold { color: var(--card-text-color); }
 
-/* Light theme overrides */
+/* Light theme overrides - Restored original yellow/orange palette */
 body.light-theme {
-  --bg-color: #f8f9fa;
-  --text-color: #212529;
+  --bg-color: #fffde7;
+  --text-color: #3e3310;
   --card-bg-color: #ffffff;
-  --card-text-color: #212529;
-  --btn-bg-color: #4263eb;
-  --btn-hover-bg-color: #364fc7;
-  --link-color: #3b5bdb;
-  --link-hover-color: #5c7cfa;
-  --footer-bg-color: #f1f3f5;
-  --footer-text-color: #495057;
-  --footer-border-color: #dee2e6;
-  --card-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --hero-bg:radial-gradient(ellipse 60% 50% at 50% 50%,#e2e8f0,#f8fafc);
+  --card-text-color: #453c15;
+  --btn-bg-color: #e65100;
+  --btn-hover-bg-color: #bf360c;
+  --link-color: #d84315;
+  --link-hover-color: #bf360c;
+  --footer-bg-color: #fff9c4;
+  --footer-text-color: #5d4037;
+  --footer-border-color: #e4d7a3;
+  --card-box-shadow: 0 4px 12px rgba(200, 180, 100, 0.2);
+  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, #fff9c4, #fff59d);
   --input-bg: #ffffff;
-  --input-text: #212529;
-  --input-border: #ced4da;
+  --input-text: #3e3310;
+  --input-border: #e4d7a3;
+  --text-muted-color: #8d7b4e;
 }
 
 /* Form inputs inherit theme — apply to all form controls globally */
@@ -442,179 +443,7 @@ input[type="text"]:focus {
 }
 .custom-search .search__icon:hover { border-left-width: 3px; }
 
-/* =========================
-   Navbar dropdown (categories)
-   ========================= */
-.navbar .dropdown-toggle,
-.nav .dropdown-toggle,
-.nav-link.dropdown-toggle {
-  color: var(--card-text-color);
-  font-weight: 600;
-  border-radius: 9999px;
-  padding: 8px 14px;
-  transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-.nav-link.dropdown-toggle:hover,
-.nav-link.dropdown-toggle:focus,
-.nav-link.dropdown-toggle[aria-expanded="true"] {
-  background-color: var(--card-bg-color);
-  color: var(--link-hover-color);
-  box-shadow: 0 0 8px var(--btn-hover-bg-color);
-  outline: none;
-}
-.dropdown-menu {
-  background-color: var(--card-bg-color);
-  color: var(--card-text-color);
-  border: 1px solid var(--footer-border-color);
-  border-radius: 12px;
-  padding: 8px 0;
-  min-width: 240px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  overflow: hidden;
-  max-height: calc(7 * 40px + 16px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--btn-hover-bg-color) transparent;
-}
-.dropdown-menu::-webkit-scrollbar { width: 8px; }
-.dropdown-menu::-webkit-scrollbar-thumb {
-  background-color: var(--btn-hover-bg-color);
-  border-radius: 8px;
-}
-.dropdown-menu::-webkit-scrollbar-track { background: transparent; }
-.dropdown-item {
-  color: var(--card-text-color);
-  padding: 10px 16px;
-  font-weight: 500;
-  transition: background-color 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
-}
-.dropdown-item:hover,
-.dropdown-item:focus {
-  background-color: var(--btn-hover-bg-color);
-  color: var(--card-text-color);
-  padding-left: 20px;
-}
-.dropdown-item.active,
-.dropdown-item:active {
-  background-color: var(--btn-bg-color);
-  color: var(--card-text-color);
-}
-.dropdown-divider {
-  border-top: 1px solid var(--footer-border-color);
-  opacity: 0.6;
-}
-.dropdown-toggle::after { border-top-color: var(--card-text-color); }
-.nav-item.dropdown { margin-right: 4px; margin-left: 8px; }
 
-/* =========================
-   Collapsible navbar search
-   ========================= */
-
-/* Ensure toggle + reveal sit on the same row */
-.nav-search-wrap { display: flex; align-items: center; gap: 8px; }
-
-/* Hide outer decorative frames in navbar to avoid extra rectangle */
-.navbar .custom-search.container { max-width: 320px; width: 100%; margin: 0; box-shadow: none; }
-.navbar .custom-search .search-container { overflow: hidden; }
-.navbar .custom-search .search-container::before,
-.navbar .custom-search .search-container::after { display: none; }
-
-/* Reveal wrapper (closed) */
-.nav-search-reveal {
-  position: relative;
-  width: 0;
-  max-width: 360px;
-  opacity: 0;
-  transform: scaleX(0.6);
-  transform-origin: left center;
-  pointer-events: none;
-  transition: width 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
-}
-
-/* Open state: controlled width (smaller to avoid being too wide) */
-.nav-search-reveal.open {
-  width: 320px;
-  opacity: 1;
-  transform: scaleX(1);
-  pointer-events: auto;
-}
-
-/* Inner search stretches to wrapper */
-.nav-search-reveal .custom-search.container { width: 100%; max-width: 100%; }
-
-/* Keep nav from wrapping unnecessarily */
-header .nav, .navbar .nav { flex-wrap: nowrap; }
-
-/* Mobile adaptation */
-@media (max-width: 576px) {
-  .nav-search-reveal.open { width: min(86vw, 320px); }
-}
-
-/* Restore Bootstrap-like pill highlighting with theme variables */
-.navbar-nav .nav-link.active,
-.navbar-nav .show > .nav-link {
-  background-color: var(--btn-bg-color) !important;
-  color: var(--card-text-color) !important;
-  box-shadow: 0 0 10px var(--btn-hover-bg-color);
-  border-radius: 9999px;
-}
-
-/* Hover for non-active links */
-.navbar-nav .nav-link:not(.active):hover {
-  background-color: var(--card-bg-color);
-  color: var(--link-hover-color);
-  box-shadow: 0 0 6px var(--btn-hover-bg-color);
-}
-
-/* Make sure default nav-link color uses theme text */
-.navbar-nav .nav-link, .nav .nav-link {
-  color: var(--text-color) !important;
-  transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-/* Theme-compatible icon base */
-.navbar-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--card-text-color);       /* controls fill via currentColor */
-  transition: color 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Make the SVG use current text color */
-.navbar-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
-/* Soft glow */
-.navbar-icon.glow {
-  text-shadow: 0 0 0 transparent;      /* clarify intent */
-  filter: drop-shadow(0 0 6px var(--btn-hover-bg-color));
-}
-
-/* Hover/Focus: stronger glow */
-.navbar-icon.glow:hover,
-.navbar-icon.glow:focus {
-  color: var(--link-hover-color);
-  filter: drop-shadow(0 0 8px var(--btn-bg-color)) drop-shadow(0 0 14px var(--btn-hover-bg-color));
-}
-
-/* Active press: tighter glow */  
-.navbar-icon.glow:active {
-  color: var(--link-color);
-  filter: drop-shadow(0 0 5px var(--btn-bg-color));
-}
-
-/* Optional animated pulse on hover */
-@keyframes iconPulse {
-  0%   { filter: drop-shadow(0 0 6px var(--btn-hover-bg-color)); }
-  50%  { filter: drop-shadow(0 0 12px var(--btn-bg-color)); }
-  100% { filter: drop-shadow(0 0 6px var(--btn-hover-bg-color)); }
-}
-.navbar-icon.glow.pulse:hover {
-  animation: iconPulse 1.2s ease-in-out infinite;
-}
 /* Themed comment cards */
 .comment-card {
   background-color: var(--card-bg-color);
@@ -1123,44 +952,6 @@ header .fs-4 {
     font-size: clamp(1.2rem, 5vw, 1.75rem) !important;
 }
 
-/* Mobile Navigation */
-.navbar-nav {
-    gap: clamp(0.25rem, 2vw, 0.5rem);
-}
-
-.nav-link {
-    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1rem) !important;
-    font-size: clamp(14px, 3.5vw, 16px);
-    border-radius: 8px;
-    margin: 2px 0;
-}
-
-/* Dropdown Improvements */
-.dropdown-menu {
-    min-width: clamp(200px, 60vw, 280px);
-    max-height: 60vh;
-    font-size: clamp(14px, 3.5vw, 16px);
-}
-
-.dropdown-item {
-    padding: clamp(8px, 3vw, 12px) clamp(12px, 4vw, 16px);
-    white-space: normal;
-    word-wrap: break-word;
-}
-
-/* Custom Search Mobile Enhancements */
-.custom-search.container {
-    max-width: clamp(280px, 70vw, 330px);
-    width: clamp(280px, 70vw, 330px);
-    margin: clamp(4px, 2vw, 10px);
-}
-
-.custom-search .input {
-    font-size: clamp(15px, 4vw, 17px);
-    padding: clamp(6px, 2vw, 10px);
-    height: clamp(36px, 10vw, 44px);
-}
-
 /* Card Responsiveness */
 .card {
     margin-bottom: clamp(1rem, 4vw, 1.5rem);
@@ -1303,26 +1094,6 @@ footer i.bi {
 
 /* Mobile Breakpoints */
 @media (max-width: 768px) {
-    /* Stack navbar items vertically on collapse */
-    .navbar-collapse {
-        padding: 1rem 0;
-    }
-    
-    .navbar-nav {
-        gap: 0.5rem;
-    }
-    
-    /* Full-width buttons in mobile */
-    .btn-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .btn-group .btn {
-        width: 100%;
-    }
-    
     /* Mobile tables */
     .table-responsive {
         font-size: 14px;
@@ -1368,11 +1139,6 @@ footer i.bi {
         width: 100% !important;
         max-width: 100% !important;
         margin-bottom: 1rem;
-    }
-    
-    /* Navigation search reveal smaller */
-    .nav-search-reveal.open {
-        width: min(90vw, 280px);
     }
     
     /* Profile stats stack */
@@ -1883,43 +1649,7 @@ footer i.bi {
     padding: 8px 16px !important;
 }
 
-.navbar-nav .nav-link:hover {
-    background: rgba(128, 128, 128, 0.1);
-}
 
-.navbar .btn-outline-danger {
-    border-radius: 8px;
-    padding: 6px 16px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    border-width: 1px;
-}
-
-.navbar .btn-outline-danger:hover {
-    background: #ef4444;
-    color: white;
-    border-color: #ef4444;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-    transform: translateY(-1px);
-}
-
-/* Logo Theme Toggling */
-.site-logo {
-    transition: opacity 0.3s ease;
-}
-.logo-dark {
-    display: block;
-}
-.logo-light {
-    display: none !important;
-}
-
-body.light-theme .logo-dark {
-    display: none !important;
-}
-body.light-theme .logo-light {
-    display: block !important;
-}
 
 /* Responsive Messenger Layout */
 @media (max-width: 991px) {
@@ -1939,4 +1669,13 @@ body.light-theme .logo-light {
     .messenger-sidebar.hidden-mobile {
         display: none !important;
     }
+}
+
+.card-header h4,
+.card-header .mb-0 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.4;
 }

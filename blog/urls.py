@@ -24,6 +24,6 @@ urlpatterns = [
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),             # User Dashboard
     path('edit/<slug:slug>/', views.PostEditView.as_view(), name='edit_post'),
     path('dashboard/delete/<slug:slug>/', views.delete_post_dashboard, name='delete_post'),
-
+   
     path('<slug:slug>/', views.BlogView.as_view(), name='blog_view'),                # Detail view for a blog post
 ]

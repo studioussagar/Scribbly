@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Review Center{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Review Center</h2>
+        <p class="text-muted mb-0">
+            Manage writer applications and AI review decisions.
+        </p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Pending</h6>
+                <h2 class="fw-bold">{{ pending_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Approved</h6>
+                <h2 class="fw-bold">{{ approved_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Rejected</h6>
+                <h2 class="fw-bold">{{ rejected_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Escalated</h6>
+                <h2 class="fw-bold">{{ escalated_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Quick Actions -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <h5 class="mb-3">Quick Actions</h5>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'review_center:pending' %}"
+               class="btn btn-primary">
+                Pending Applications
+            </a>
+
+            <a href="#"
+               class="btn btn-outline-secondary">
+                Approved Applications
+            </a>
+
+            <a href="#"
+               class="btn btn-outline-secondary">
+                Rejected Applications
+            </a>
+
+            <a href="#"
+               class="btn btn-outline-secondary">
+                Escalated Applications
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Applications -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Recent Applications</h5>
+    </div>
+
+    <div class="card-body p-0">
+
+        {% if recent_applications %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for application in recent_applications %}
+                <tr>
+
+                    <td>
+                        {{ application.user.username }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-secondary">
+                            {{ application.status|title }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ application.submitted_at|date:"M d, Y H:i" }}
+                    </td>
+
+                    <td class="text-end">
+
+                        <a href="{% url 'review_center:application-detail' application.pk %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Review
+                        </a>
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+            <h6 class="text-muted">
+                No applications available.
+            </h6>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}
+Application Review
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Applicant Information -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                Applicant Information
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                <strong>Username:</strong>
+                {{ application.user.username }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ application.status|title }}
+            </p>
+
+            <p>
+                <strong>Submitted:</strong>
+                {{ application.submitted_at }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Analysis -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                AI Blog Analysis
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if analysis %}
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Writing Score:</strong>
+                        {{ analysis.writing_score }}/100
+                    </p>
+
+                    <p>
+                        <strong>Grammar Score:</strong>
+                        {{ analysis.grammar_score }}/100
+                    </p>
+
+                    <p>
+                        <strong>Readability Score:</strong>
+                        {{ analysis.readability_score }}/100
+                    </p>
+
+                    <p>
+                        <strong>Structure Score:</strong>
+                        {{ analysis.structure_score }}/100
+                    </p>
+
+                    <p>
+                        <strong>Overall Score:</strong>
+                        {{ analysis.overall_score }}/100
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h6>Summary</h6>
+
+                    <p>
+                        {{ analysis.summary }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h6>Strengths</h6>
+
+                    {% if analysis.strengths %}
+
+                    <ul>
+                        {% for strength in analysis.strengths %}
+                        <li>{{ strength }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    {% else %}
+
+                    <p class="text-muted">
+                        No strengths available.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h6>Weaknesses</h6>
+
+                    {% if analysis.weaknesses %}
+
+                    <ul>
+                        {% for weakness in analysis.weaknesses %}
+                        <li>{{ weakness }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    {% else %}
+
+                    <p class="text-muted">
+                        No weaknesses available.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <p class="text-muted">
+                AI analysis has not been generated yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Risk Assessment -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                AI Risk Assessment
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if risk %}
+
+            <!-- Overall Risk -->
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Risk Score:</strong>
+                        {{ risk.risk_score }}/100
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Risk Level:</strong>
+
+                        {% if risk.risk_level == "low" %}
+                            <span class="badge bg-success">
+                                Low
+                            </span>
+
+                        {% elif risk.risk_level == "medium" %}
+                            <span class="badge bg-warning text-dark">
+                                Medium
+                            </span>
+
+                        {% elif risk.risk_level == "high" %}
+                            <span class="badge bg-danger">
+                                High
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                {{ risk.risk_level|title }}
+                            </span>
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- Risk Signals -->
+
+            <h6 class="mb-3">
+                Detected Risk Signals
+            </h6>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Toxicity:</strong>
+
+                        {% if risk.toxicity_detected %}
+                            <span class="badge bg-danger">
+                                Detected
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Not Detected
+                            </span>
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Spam:</strong>
+
+                        {% if risk.spam_detected %}
+                            <span class="badge bg-danger">
+                                Detected
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Not Detected
+                            </span>
+                        {% endif %}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Suspicious Links:</strong>
+
+                        {% if risk.suspicious_links %}
+                            <span class="badge bg-danger">
+                                Detected
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Not Detected
+                            </span>
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>AI-Generated Content:</strong>
+
+                        {% if risk.ai_generated_detected %}
+                            <span class="badge bg-warning text-dark">
+                                Detected
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Not Detected
+                            </span>
+                        {% endif %}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- Risk Explanation -->
+
+            <h6>
+                Risk Assessment Explanation
+            </h6>
+
+            <p>
+                {{ risk.overall_explanation }}
+            </p>
+
+            <p class="text-muted small mb-0">
+                This assessment is an AI-generated moderation signal
+                and is not a final moderation decision.
+            </p>
+
+            {% else %}
+
+            <p class="text-muted">
+                AI risk assessment has not been generated yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Recommendation -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                AI Recommendation
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if decision %}
+
+            <p>
+                <strong>Recommendation:</strong>
+                {{ decision.recommendation|title }}
+            </p>
+
+            <p>
+                <strong>Confidence:</strong>
+                {{ decision.confidence }}%
+            </p>
+
+            <p>
+                <strong>Reasoning:</strong>
+                {{ decision.reasoning }}
+            </p>
+
+            {% else %}
+
+            <p class="text-muted">
+                AI recommendation has not been generated yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Blog Preview -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+            <h4 class="mb-0">
+                Preview Blog
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <h2>
+                {{ application.submitted_title }}
+            </h2>
+
+            <hr>
+
+            {{ application.submitted_content|safe }}
+
+        </div>
+
+    </div>
+
+
+    <!-- Actions -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <div class="d-flex gap-2">
+
+                <form method="post"
+                      action="{% url 'review_center:approve' application.pk %}">
+
+                    {% csrf_token %}
+
+                    <button class="btn btn-success">
+                        Approve Application
+                    </button>
+
+                </form>
+
+
+                <form method="post"
+                      action="{% url 'review_center:reject' application.pk %}">
+
+                    {% csrf_token %}
+
+                    <button class="btn btn-danger">
+                        Reject Application
+                    </button>
+
+                </form>
+
+
+                <form method="post"
+                      action="{% url 'review_center:analyze-application' application.pk %}">
+
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-primary">
+                        Analyze Application
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
