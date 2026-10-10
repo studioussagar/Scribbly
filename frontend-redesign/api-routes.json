@@ -1,0 +1,23 @@
+{
+  "pageRoutes": [
+    "/", "/create/", "/try/", "/blog-list/", "/login/", "/signup/", "/activate/<uidb64>/<token>/", "/logout/", "/password-change/", "/about/", "/category/<slug>/", "/liked-posts/", "/disliked-posts/", "/shared-posts/", "/dashboard/", "/edit/<slug>/", "/dashboard/delete/<slug>/", "/<slug>/",
+    "/@", "/@/me/", "/@/<username>/", "/@/avatar/upload/", "/@/avatar/default/", "/edit/", "/@/follow/<username>/", "/inbox/", "/notifications/", "/@/message/<target_username>/", "/<username>/followers/", "/<username>/following/",
+    "/password-reset/", "/password-reset/done/", "/password-reset-confirm/<uidb64>/<token>/", "/password-reset-complete/",
+    "/review-center/", "/review-center/pending/", "/review-center/application/<int:pk>/"
+  ],
+  "actionRoutes": {
+    "like": "/like/<slug>/",
+    "dislike": "/dislike/<slug>/",
+    "comment": "/add-comment/<slug>",
+    "share": "/share-post/<slug>/",
+    "approve": "/review-center/application/<int:pk>/approve/",
+    "reject": "/review-center/application/<int:pk>/reject/",
+    "analyze": "/review-center/application/<int:pk>/analyze/"
+  },
+  "frontendHelpers": [
+    "window.scribblyActions.like(slug)",
+    "window.scribblyActions.dislike(slug)",
+    "window.scribblyActions.share(slug, site)",
+    "window.scribblyActions.comment(slug, content, parentId)"
+  ]
+}

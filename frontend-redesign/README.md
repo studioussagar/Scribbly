@@ -27,3 +27,5 @@ The interface keeps the original Django navigation and request targets:
 - `window.scribblyActions.comment(slug, content, parentId)`
 
 The preview uses sample content for visual review. When integrated into Django, replace sample post data with template context or API data while keeping the URLs above unchanged.
+
+The complete page and action route inventory is maintained in [`api-routes.json`](api-routes.json), including profile, password reset, review center, moderation, and post interaction endpoints.
