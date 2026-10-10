@@ -207,3 +207,120 @@ footer > .container { border-top: 1px solid var(--footer-border-color); padding-
 @media (prefers-reduced-motion: reduce) {
   .card:hover, .btn:hover { transform: none; }
 }
+
+
+/* Main Django integration: portfolio-inspired nav + hero internals. */
+:root {
+  --font-display: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+body { font-family: var(--font-body); }
+h1, h2, h3, h4, h5, h6, .navbar-brand, .btn { font-family: var(--font-display); }
+.eyebrow, .hero-eyebrow, .post-kicker, .post-meta, .mobile-nav-label, .footer-location { font-family: var(--font-mono); }
+
+/* The original Bootstrap/Django nav remains structurally intact; this changes its visual language. */
+.design-header {
+  border-color: var(--footer-border-color) !important;
+  border-radius: 2px !important;
+  padding: 8px 12px !important;
+  background: color-mix(in srgb, var(--bg-color) 92%, transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(18px) saturate(135%);
+}
+.design-navbar { min-height: 56px; }
+.design-navbar .navbar-brand { margin-right: auto !important; padding: 2px 0 !important; }
+.design-navbar .site-logo { height: 38px !important; }
+.design-navbar .navbar-nav { gap: 8px; }
+.design-navbar .navbar-nav .nav-link {
+  font-family: var(--font-mono);
+  font-size: .68rem !important;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-radius: 2px !important;
+  padding: 10px 12px !important;
+  color: var(--text-muted-color) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.design-navbar .navbar-nav .nav-link:hover,
+.design-navbar .navbar-nav .nav-link.active {
+  color: var(--text-color) !important;
+  background: transparent !important;
+}
+.design-navbar .navbar-nav .nav-link.active::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: var(--btn-bg-color);
+  margin: 5px auto -6px;
+}
+.design-navbar .navbar-icon,
+.design-navbar #nav-search-toggle {
+  border: 1px solid var(--footer-border-color) !important;
+  border-radius: 2px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.design-navbar .toggle-switch { margin-right: 4px; }
+.design-navbar .nav-item.dropdown { margin-left: 0; margin-right: 0; }
+.design-navbar .dropdown-menu {
+  border-radius: 2px !important;
+  padding: 6px !important;
+  background: var(--card-bg-color) !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,.24) !important;
+}
+.design-navbar .dropdown-item {
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .03em;
+}
+.design-navbar .dropdown-item:hover { transform: none; }
+
+/* Same hero section footprint, refreshed internal composition. */
+.hero-section {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  min-height: clamp(350px, 52vw, 560px);
+  text-align: left;
+  padding: clamp(2rem, 6vw, 5.5rem) clamp(1.5rem, 6vw, 6rem) !important;
+  border-radius: 2px !important;
+  border: 1px solid var(--footer-border-color) !important;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card-bg-color) 92%, var(--btn-bg-color) 8%), transparent), var(--hero-bg) !important;
+  box-shadow: none !important;
+}
+.hero-copy { position: relative; z-index: 1; }
+.hero-eyebrow { margin: 0 0 1.35rem; color: var(--text-muted-color); font-size: .66rem; letter-spacing: .12em; }
+.hero-eyebrow span { display: inline-block; width: 27px; height: 1px; margin-right: 8px; vertical-align: middle; background: var(--btn-bg-color); }
+.hero-section h1 { max-width: 720px; font-size: clamp(2.5rem, 6.8vw, 6rem) !important; line-height: .96; letter-spacing: -.07em; }
+.hero-section .lead { max-width: 510px; font-size: clamp(1rem, 1.55vw, 1.16rem); line-height: 1.72; }
+.hero-section .btn { border-radius: 2px !important; box-shadow: none; }
+.hero-arrow { margin-left: 1rem; font-size: 1.05em; }
+.hero-orbit { position: relative; width: min(100%, 360px); aspect-ratio: 1; display: grid; place-items: center; justify-self: end; }
+.hero-orbit-ring { position: absolute; border: 1px solid var(--footer-border-color); border-radius: 50%; transform: rotate(-25deg) scaleX(.66); }
+.hero-orbit-ring-outer { inset: 3%; border-color: color-mix(in srgb, var(--btn-bg-color) 58%, var(--footer-border-color)); }
+.hero-orbit-ring-inner { inset: 20%; transform: rotate(25deg) scaleX(.66); }
+.hero-orbit-core { display: grid; place-items: center; width: 112px; height: 112px; border-radius: 50%; color: var(--btn-text-color); background: var(--btn-bg-color); font: 700 4.5rem/.8 var(--font-display); letter-spacing: -.12em; box-shadow: 0 0 70px rgba(var(--btn-bg-color-rgb), .22); }
+.hero-orbit-label { position: absolute; color: var(--text-muted-color); font: 500 .6rem var(--font-mono); letter-spacing: .08em; }
+.hero-orbit-label-one { top: 11%; left: 2%; }
+.hero-orbit-label-two { top: 47%; right: 0; }
+.hero-orbit-label-three { bottom: 10%; left: 16%; }
+
+@media (max-width: 991.98px) {
+  .design-header { padding: 6px 10px !important; }
+  .hero-section { grid-template-columns: 1fr; }
+  .hero-orbit { justify-self: center; width: min(72vw, 330px); margin-top: 1rem; }
+  .design-navbar .navbar-collapse { border-radius: 0 0 2px 2px !important; }
+}
+@media (max-width: 575.98px) {
+  .hero-section { padding: 2rem 1.25rem !important; }
+  .hero-section h1 { font-size: clamp(2.4rem, 13vw, 4rem) !important; }
+  .hero-section .btn { width: auto; }
+  .hero-orbit { width: min(82vw, 300px); }
+}
