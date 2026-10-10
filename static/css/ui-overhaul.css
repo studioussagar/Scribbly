@@ -246,6 +246,36 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, .btn { font-family: var(--font-display); 
 .design-navbar .dropdown-menu { border-radius: 2px !important; padding: 6px !important; background: var(--card-bg-color) !important; box-shadow: 0 18px 40px rgba(0,0,0,.24) !important; }
 .design-navbar .dropdown-item { border-radius: 2px; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .03em; }
 .design-navbar .dropdown-item:hover { transform: none; }
+.design-header {
+  min-height: 72px;
+  border-width: 0 0 1px !important;
+  margin-bottom: 0 !important;
+  padding: 0 2px !important;
+  background: var(--bg-color) !important;
+}
+.design-navbar { padding: 0 !important; }
+.design-navbar .container-fluid { min-height: 72px; }
+.design-navbar .navbar-brand.brand-only { flex: 0 0 auto; margin-right: 0 !important; }
+.design-navbar .navbar-brand .site-logo { width: 48px; height: 48px !important; object-fit: contain; }
+.design-navbar .navbar-collapse { align-items: center; }
+.design-navbar .navbar-nav { margin-left: auto !important; margin-right: 20px; }
+.design-navbar .navbar-nav .nav-item { margin-left: 0 !important; margin-right: 0 !important; }
+.design-navbar .nav-search-wrap { gap: 12px; }
+.design-navbar #nav-search-toggle,
+.design-navbar .navbar-icon,
+.design-navbar .toggle-switch { width: 38px; height: 38px; }
+.design-navbar #nav-search-toggle { padding: 0 !important; }
+.design-navbar .navbar-icon svg { width: 16px; height: 16px; }
+.design-navbar .nav-item:has(.toggle-switch) { margin-right: 0 !important; }
+.design-navbar .nav-item:has(.toggle-switch) .toggle-switch { width: 38px !important; height: 38px !important; box-shadow: none !important; }
+.design-navbar .nav-item:has(.toggle-switch) .switch-label { height: 38px !important; border-radius: 2px !important; border: 1px solid var(--footer-border-color) !important; background: transparent !important; }
+.design-navbar .nav-item:has(.toggle-switch) .slider::before { top: 10px !important; left: 10px !important; width: 16px !important; height: 16px !important; }
+.design-navbar .nav-item:has(.toggle-switch) .checkbox:checked ~ .slider::before { transform: translateX(2px) !important; }
+.design-navbar #notificationDropdown { width: 38px; height: 38px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--footer-border-color); border-radius: 2px !important; }
+.design-navbar #notificationDropdown .bi-bell { font-size: 15px; }
+.design-navbar .nav-item:last-child .nav-link { margin-left: 0; padding-left: 22px !important; border-left: 1px solid var(--footer-border-color); color: var(--text-color) !important; }
+.design-navbar .nav-item:last-child .nav-link::after { content: "↗"; display: inline-block; color: var(--btn-bg-color); font-size: 1rem; margin-left: 8px; }
+.design-navbar .nav-search-reveal.open { width: 280px; }
 
 /* Home hero restored to the original centered composition; current color tokens remain active. */
 .hero-section {
