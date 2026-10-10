@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {"path": "/", "title": "Scribbly Home"},
+    {"path": "/about/", "title": "About Scribbly"},
+    {"path": "/blog-list/", "title": "Blog Journal"},
+    {"path": "/login/", "title": "Log in"},
+    {"path": "/signup/", "title": "Sign up"},
+    {"path": "/create/", "title": "Create a blog"},
+    {"path": "/dashboard/", "title": "Dashboard"}
+  ]
+}

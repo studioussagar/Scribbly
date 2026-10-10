@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Scribbly — a quiet place for loud ideas." />
+  <title>Scribbly — A blog for curious minds</title>
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Scribbly home">
+        <img src="assets/logo-dark.png" alt="Scribbly" class="brand-mark brand-mark-dark" />
+        <img src="assets/logo-light.png" alt="Scribbly" class="brand-mark brand-mark-light" />
+        <span class="brand-name">SCRIBBLY</span>
+      </a>
+      <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false" data-mobile-toggle>☰</button>
+      <nav class="primary-nav" data-nav>
+        <a href="/" class="nav-link is-active">Home</a>
+        <a href="/about/" class="nav-link">About</a>
+        <details class="nav-menu">
+          <summary>Categories <span>⌄</span></summary>
+          <div class="nav-popover">
+            <a href="/category/design/">Design</a>
+            <a href="/category/technology/">Technology</a>
+            <a href="/category/life/">Life</a>
+            <a href="/category/ideas/">Ideas</a>
+          </div>
+        </details>
+        <a href="/blog-list/" class="nav-link">Explore</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" data-search-toggle aria-label="Open search">⌕</button>
+        <button class="icon-button" data-theme-toggle aria-label="Toggle light and dark mode">◐</button>
+        <a href="/login/" class="login-link">Login <span>↗</span></a>
+      </div>
+      <form class="search-bar" method="get" action="/blog-list/" data-search-form>
+        <input type="search" name="q" placeholder="Search ideas, stories, people…" aria-label="Search blogs" />
+        <button type="submit">Search ↗</button>
+      </form>
+    </header>
+
+    <main>
+      <section class="hero section-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> A QUIET PLACE FOR LOUD IDEAS</p>
+          <h1>Read closely.<br /><em>Write honestly.</em></h1>
+          <p class="hero-intro">Scribbly is an independent corner of the internet for thoughtful stories, useful experiments, and the people behind them.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/blog-list/">Explore the journal <span>↗</span></a>
+            <a class="text-link" href="/about/">Why Scribbly <span>→</span></a>
+          </div>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
+          <div class="orbit-core"><span>S</span></div>
+          <span class="orbit-label label-one">01 / READ</span><span class="orbit-label label-two">02 / WRITE</span><span class="orbit-label label-three">03 / CONNECT</span>
+        </div>
+      </section>
+
+      <section class="section-block" id="posts">
+        <div class="section-heading"><div><p class="eyebrow"><span></span> THE LATEST</p><h2>Fresh from the journal</h2></div><a href="/blog-list/" class="text-link">View all posts <span>↗</span></a></div>
+        <div class="post-layout">
+          <article class="feature-post">
+            <div class="post-index">01 <span>FEATURED ESSAY</span></div>
+            <div class="feature-art"><span class="art-word">IDEAS</span><span class="art-caption">A FIELD GUIDE TO<br />PAYING ATTENTION</span></div>
+            <div class="post-meta"><span>Design & culture</span><span>8 min read</span></div>
+            <h3><a href="/featured-story/">The work gets better when you look at it longer.</a></h3>
+            <p>A note on attention, creative practice, and making room for the ideas that arrive slowly.</p>
+            <a href="/featured-story/" class="arrow-link">Read the essay <span>↗</span></a>
+          </article>
+          <div class="post-list">
+            <article class="post-row"><span class="post-number">02</span><div><p class="post-kicker">TECHNOLOGY · 06 MIN</p><h3><a href="/blog-list/">Small tools, serious leverage</a></h3><p>What I learned building a slower, calmer workflow.</p><a href="/blog-list/" class="post-author">Sagar Samadder <span>↗</span></a></div></article>
+            <article class="post-row"><span class="post-number">03</span><div><p class="post-kicker">LIFE · 04 MIN</p><h3><a href="/blog-list/">A beginner’s guide to starting again</a></h3><p>There is no perfect time. There is only the next small step.</p><a href="/blog-list/" class="post-author">Scribbly community <span>↗</span></a></div></article>
+            <article class="post-row"><span class="post-number">04</span><div><p class="post-kicker">IDEAS · 07 MIN</p><h3><a href="/blog-list/">Notes from the edge of the map</a></h3><p>On curiosity, changing direction, and staying open.</p><a href="/blog-list/" class="post-author">Sagar Samadder <span>↗</span></a></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="manifesto section-grid">
+        <div class="manifesto-mark">S<span>/</span></div><div><p class="eyebrow"><span></span> THE SCRIBBLY PRINCIPLE</p><h2>Good ideas need<br /><em>somewhere to land.</em></h2><p>Read something that shifts your perspective. Write the thing you have been carrying around. Find people who care about the details.</p><a href="/signup/" class="button button-ghost">Join the conversation <span>↗</span></a></div>
+      </section>
+
+      <section class="section-block category-section"><div class="section-heading"><div><p class="eyebrow"><span></span> FIND YOUR THREAD</p><h2>Browse by feeling</h2></div></div><div class="category-grid"><a href="/category/design/" class="category-card"><span>01</span><strong>Design</strong><small>Make it meaningful →</small></a><a href="/category/technology/" class="category-card"><span>02</span><strong>Technology</strong><small>Build with intention →</small></a><a href="/category/life/" class="category-card"><span>03</span><strong>Life</strong><small>Stay curious →</small></a><a href="/category/ideas/" class="category-card"><span>04</span><strong>Ideas</strong><small>Think out loud →</small></a></div></section>
+
+      <section class="newsletter section-grid"><div><p class="eyebrow"><span></span> THE WEEKLY NOTE</p><h2>A little signal.<br /><em>Never noise.</em></h2></div><div><p>Occasional notes on new stories, useful links, and ideas worth keeping. No algorithms. No clutter.</p><form class="newsletter-form" action="/subscribe/" method="post"><input type="email" name="email" placeholder="you@example.com" required /><button class="button button-primary" type="submit">Subscribe <span>↗</span></button></form><small>By subscribing, you agree to receive Scribbly updates.</small></div></section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-brand"><img src="assets/logo-dark.png" alt="" class="brand-mark brand-mark-dark" /><img src="assets/logo-light.png" alt="" class="brand-mark brand-mark-light" /><span>SCRIBBLY</span></div><p>Stories, ideas, and the space between them.</p><div class="footer-links"><a href="/about/">About</a><a href="/blog-list/">Journal</a><a href="/login/">Login</a></div></footer>
+  </div>
+  <div class="toast" role="status" aria-live="polite" data-toast></div>
+  <script src="app.js"></script>
+</body>
+</html>
