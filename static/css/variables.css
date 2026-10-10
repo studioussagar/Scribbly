@@ -1,120 +1,96 @@
 :root {
-  /* Scribbly semantic color tokens — Dark Mode (single source of truth) */
-  --color-background: #0F111A;
-  --color-surface: #161925;
-  --color-text-primary: #F5F5F4;
-  --color-text-muted: #94A3B8;
-  --color-accent: #818CF8;
-  --color-accent-strong: #A5B4FC;
-  --color-border: #2A2D3D;
+  /* Scribbly — deep ink + luminous violet dark palette */
+  --color-background: #0b1020;
+  --color-surface: #121a2b;
+  --color-text-primary: #f6f7fb;
+  --color-text-muted: #9aa7bf;
+  --color-accent: #8b7cff;
+  --color-accent-strong: #b7aaff;
+  --color-border: #26324a;
+  --color-success: #45c6a8;
+  --color-danger: #ef7890;
 
-  /* Legacy component variables, mapped onto the semantic tokens */
   --bg-color: var(--color-background);
   --text-color: var(--color-text-primary);
   --card-bg-color: var(--color-surface);
   --card-text-color: var(--color-text-primary);
   --btn-bg-color: var(--color-accent);
-  --btn-bg-color-rgb: 129, 140, 248;
-  --btn-text-color: #0F111A;
+  --btn-bg-color-rgb: 139, 124, 255;
+  --btn-text-color: #10152a;
   --btn-hover-bg-color: var(--color-accent-strong);
-  --link-color: var(--color-accent);
-  --link-hover-color: var(--color-accent-strong);
-  --footer-bg-color: var(--color-surface);
+  --link-color: #a99dff;
+  --link-hover-color: #c8c0ff;
+  --footer-bg-color: #0e1628;
   --footer-text-color: var(--color-text-muted);
   --footer-border-color: var(--color-border);
-  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(129, 140, 248, 0.14), rgba(15, 17, 26, 0));
-
-  /* Theme-compatible muted text color */
+  --hero-bg: radial-gradient(ellipse 75% 70% at 80% 25%, rgba(139,124,255,.22), rgba(11,16,32,0) 70%);
   --text-muted-color: var(--color-text-muted);
-  --text-muted-color-light: #94A3B8;
+  --text-muted-color-light: #9aa7bf;
+  --input-bg: #0e1728;
+  --input-text: var(--color-text-primary);
+  --input-border: var(--color-border);
 
-  /* Fonts and spacing */
-  --border-radius: 12px;
-  --font-family-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --font-weight-bold: 700;
-  --font-weight-semibold: 600;
+  --border-radius: 14px;
+  --font-family-sans: "DM Sans", system-ui, sans-serif;
+  --font-weight-bold: 800;
+  --font-weight-semibold: 700;
   --font-size-large: 2rem;
   --font-size-medium: 1.25rem;
-  --font-size-small: 0.85rem;
+  --font-size-small: .85rem;
   --spacing-md: 1.5rem;
-  --spacing-sm: 0.85rem;
+  --spacing-sm: .85rem;
 
-  /* Edit profile form variables (fixed light card, same in both themes) */
-  --ep-text-primary: #1C1917;
-  --ep-text-secondary: #57534E;
-  --ep-bg-container: #FFFFFF;
-  --ep-bg-input: #FAF9F6;
-  --ep-border-input: #E7E5E4;
-  --ep-border-focus: #D97706;
-  --ep-shadow-light: rgba(28, 25, 23, 0.1);
-  --ep-shadow-deep: rgba(217, 119, 6, 0.25);
-  --ep-primary: #D97706;
-  --ep-primary-dark: #B45309;
-  --ep-primary-hover: #92400E;
+  /* Edit profile compatibility tokens */
+  --ep-text-primary: #1c1917;
+  --ep-text-secondary: #57534e;
+  --ep-bg-container: #ffffff;
+  --ep-bg-input: #faf9f6;
+  --ep-border-input: #e7e5e4;
+  --ep-border-focus: #d97706;
+  --ep-shadow-light: rgba(28, 25, 23, .1);
+  --ep-shadow-deep: rgba(217, 119, 6, .25);
+  --ep-primary: #d97706;
+  --ep-primary-dark: #b45309;
+  --ep-primary-hover: #92400e;
   --ep-error: #dc2626;
-  --ep-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --ep-font-family: "DM Sans", system-ui, sans-serif;
   --btn-border-radius: 9999px;
   --spacing-large: 1.5rem;
   --spacing-medium: 1rem;
-  --spacing-small: 0.6rem;
+  --spacing-small: .6rem;
   --font-size-base: 1rem;
 }
 
-/* Scribbly semantic color tokens — Light Mode */
-body.light-theme {
-  --color-background: #FAF9F6;
-  --color-surface: #FFFFFF;
-  --color-text-primary: #1C1917;
-  --color-text-muted: #57534E;
-  --color-accent: #D97706;
-  --color-accent-strong: #B45309;
-  --color-border: #E7E5E4;
-
-  --bg-color: var(--color-background);
-  --text-color: var(--color-text-primary);
-  --card-bg-color: var(--color-surface);
-  --card-text-color: var(--color-text-primary);
-  --btn-bg-color: var(--color-accent);
-  --btn-bg-color-rgb: 217, 119, 6;
-  --btn-text-color: #1C1917;
-  --btn-hover-bg-color: var(--color-accent-strong);
-  --link-color: var(--color-accent);
-  --link-hover-color: var(--color-accent-strong);
-  --footer-bg-color: var(--color-surface);
-  --footer-text-color: var(--color-text-muted);
-  --footer-border-color: var(--color-border);
-  --card-box-shadow: 0 4px 12px rgba(28, 25, 23, 0.08);
-  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217, 119, 6, 0.1), rgba(250, 249, 246, 0));
-  --input-bg: #FFFFFF;
-  --input-text: #1C1917;
-  --input-border: #E7E5E4;
-  --text-muted-color: var(--color-text-muted);
-}
-
-/* Alternate light theme (used in profile pages) */
+/* Scribbly — bright paper + violet light palette */
+body.light-theme,
 body.light-theme-alt {
-  --color-background: #FAF9F6;
-  --color-surface: #FFFFFF;
-  --color-text-primary: #1C1917;
-  --color-text-muted: #57534E;
-  --color-accent: #D97706;
-  --color-accent-strong: #B45309;
-  --color-border: #E7E5E4;
+  --color-background: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-text-primary: #171b2d;
+  --color-text-muted: #68728a;
+  --color-accent: #5752d9;
+  --color-accent-strong: #433fbd;
+  --color-border: #e2e5ef;
+  --color-success: #168c78;
+  --color-danger: #c84f68;
 
   --bg-color: var(--color-background);
   --text-color: var(--color-text-primary);
   --card-bg-color: var(--color-surface);
   --card-text-color: var(--color-text-primary);
   --btn-bg-color: var(--color-accent);
-  --btn-bg-color-rgb: 217, 119, 6;
-  --btn-text-color: #1C1917;
+  --btn-bg-color-rgb: 87, 82, 217;
+  --btn-text-color: #ffffff;
   --btn-hover-bg-color: var(--color-accent-strong);
-  --link-color: var(--color-accent);
-  --link-hover-color: var(--color-accent-strong);
-  --footer-bg-color: var(--color-surface);
+  --link-color: #4c47c4;
+  --link-hover-color: #332fa2;
+  --footer-bg-color: #ffffff;
   --footer-text-color: var(--color-text-muted);
   --footer-border-color: var(--color-border);
-  --card-box-shadow: 0 4px 12px rgba(28, 25, 23, 0.08);
-  --hero-bg: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(217, 119, 6, 0.1), rgba(250, 249, 246, 0));
+  --card-box-shadow: 0 10px 30px rgba(35, 42, 74, .08);
+  --hero-bg: radial-gradient(ellipse 75% 70% at 80% 25%, rgba(87,82,217,.13), rgba(246,247,251,0) 70%);
+  --input-bg: #ffffff;
+  --input-text: var(--color-text-primary);
+  --input-border: var(--color-border);
   --text-muted-color: var(--color-text-muted);
 }
