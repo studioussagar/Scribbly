@@ -146,18 +146,22 @@
                             </li>
 
                             <!-- 3) Home -->
-                            <li class="nav-item me-lg-2">
+                            <li class="nav-item me-lg-2 nav-sequence-home">
                                 <a href="{% url 'home_view' %}"
                                     class="nav-link {% if request.resolver_match.url_name == 'home_view' %}active{% endif %}">Home</a>
                             </li>
 
                             <!-- 3.5) About -->
-                            <li class="nav-item me-lg-2">
+                            <li class="nav-item me-lg-2 nav-sequence-about">
                                 <a href="{% url 'about_view' %}"
                                     class="nav-link {% if request.resolver_match.url_name == 'about_view' %}active{% endif %}">About</a>
                             </li>
+                            <li class="nav-item me-lg-2 nav-sequence-explore">
+                                <a href="{% url 'blog_list' %}"
+                                    class="nav-link {% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}">Explore</a>
+                            </li>
                             <!-- 5) Categories pill -->
-                            <li class="nav-item dropdown me-lg-2">
+                            <li class="nav-item dropdown me-lg-2 nav-sequence-categories">
                                 <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill" href="#"
                                     id="categoryDropdown" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">Categories</a>
@@ -399,39 +403,35 @@
         });
     </script>
 
-    <!-- Collapsible search reveal -->
+    <!-- Dropdown search reveal, matching the standalone frontend redesign -->
     <script>
         (function () {
             const toggleBtn = document.getElementById('nav-search-toggle');
             const box = document.getElementById('nav-search-reveal');
+            if (!toggleBtn || !box) return;
 
             function openBox() {
                 box.classList.add('open');
                 toggleBtn.setAttribute('aria-expanded', 'true');
                 const input = box.querySelector('input');
-                if (input) setTimeout(() => input.focus(), 150);
+                if (input) input.focus();
             }
             function closeBox() {
                 box.classList.remove('open');
                 toggleBtn.setAttribute('aria-expanded', 'false');
             }
-            function toggle() {
-                if (box.classList.contains('open')) closeBox(); else openBox();
-            }
 
             toggleBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                toggle();
+                if (box.classList.contains('open')) closeBox();
+                else openBox();
             });
 
-            // Escape or outside click closes
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && box.classList.contains('open')) closeBox();
             });
             document.addEventListener('click', (e) => {
-                if (!box.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
-                    if (box.classList.contains('open')) closeBox();
-                }
+                if (!box.contains(e.target) && !toggleBtn.contains(e.target)) closeBox();
             });
         })();
     </script>
